@@ -20,7 +20,7 @@ function App() {
         <Route path={"/dashboard"} exact component={Dashboard}/>
         <Route path={"/admin"} component={Admins}/>
         <Route path={"/users"} component={Users}/>
-        <Route path={"/questionset"} component={QuestionSet}/>
+        {/*<Route path={"/questionset"} component={QuestionSet}/>*/}
         <Route path={"/settings"} component={Settings}/>
         <Route path={"/*"} component={NotFound}/>
       </Switch>
