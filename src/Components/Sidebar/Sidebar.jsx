@@ -63,9 +63,17 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
     },
 }));
 
+const MyLink = styled(Link)(({theme})=>({
+    textDecoration:'none',
+    color:'black',
+    padding:10,
+
+}))
+
 const drawerWidth = 250;
 
-function ResponsiveDrawer(props) {
+function Sidebar(props) {
+
     const {window} = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const handleDrawerToggle = () => {
@@ -176,9 +184,11 @@ function ResponsiveDrawer(props) {
             </Toolbar>
             <List>
                 {SidebarConfig.map((items, index) => (
-                    <ListItem button key={index}>
-                        <Link to={items.path}><ListItemText primary={items.name}/></Link>
-                    </ListItem>
+                    <MyLink to={items.path}  >
+                        <ListItem button sx={{}} key={index}>
+                            <ListItemText primary={items.name}/>
+                        </ListItem>
+                    </MyLink>
                 ))}
             </List>
         </div>
@@ -245,44 +255,38 @@ function ResponsiveDrawer(props) {
                 {renderMobileMenu}
                 {renderMenu}
             </AppBar>
-            <Box
-                component="nav"
-                sx={{width: {sm: drawerWidth}, flexShrink: {sm: 0}}}
-                aria-label="mailbox folders"
+            <Drawer
+                container={container}
+                variant="temporary"
+                open={mobileOpen}
+                onClose={handleDrawerToggle}
+                ModalProps={{
+                    keepMounted: true,
+                }}
+                sx={{
+                    display: {xs: 'block', sm: 'none'},
+                    '& .MuiDrawer-paper': {boxSizing: 'border-box', width: drawerWidth},
+                }}
             >
-                <Drawer
-                    container={container}
-                    variant="temporary"
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    ModalProps={{
-                        keepMounted: true,
-                    }}
-                    sx={{
-                        display: {xs: 'block', sm: 'none'},
-                        '& .MuiDrawer-paper': {boxSizing: 'border-box', width: drawerWidth},
-                    }}
-                >
-                    {drawer}
-                </Drawer>
-                <Drawer
-                    variant="permanent"
-                    sx={{
-                        position: 'static',
-                        display: {xs: 'none', sm: 'block'},
-                        '& .MuiDrawer-paper': {boxSizing: 'border-box', width: drawerWidth},
-                    }}
-                    open
-                >
-                    {drawer}
-                </Drawer>
-            </Box>
+                {drawer}
+            </Drawer>
+            <Drawer
+                variant="permanent"
+                sx={{
+                    position: 'static',
+                    display: {xs: 'none', sm: 'block'},
+                    '& .MuiDrawer-paper': {boxSizing: 'border-box', width: drawerWidth},
+                }}
+                open
+            >
+                {drawer}
+            </Drawer>
         </Box>
     );
 }
 
-ResponsiveDrawer.propTypes = {
+Sidebar.propTypes = {
     window: PropTypes.func,
 };
 
-export default ResponsiveDrawer;
+export default Sidebar;
