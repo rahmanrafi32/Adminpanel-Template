@@ -1,6 +1,6 @@
 import React from 'react';
 import {styled} from "@mui/material/styles";
-import QuesForm from "./QuesForm";
+import CreateQues from "./CreateQues";
 
 const Div = styled('div')(({theme}) => ({
     marginLeft: 250,
@@ -13,7 +13,7 @@ const Div = styled('div')(({theme}) => ({
 const QuestionSet = () => {
     return (
         <Div>
-            <QuesForm/>
+            <CreateQues/>
         </Div>
     );
 };
