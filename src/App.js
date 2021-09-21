@@ -18,8 +18,8 @@ function App() {
     <Router>
       <Sidebar/>
       <Switch>
-        <Route path={"/"} exact component={Dashboard}/>
-        <Route path={"/login"} exact component={Login}/>
+        <Route path={"/dashboard"} component={Dashboard}/>
+        <Route path={"/"} exact component={Login}/>
         <Route path={"/admin"} component={Admins}/>
         <Route path={"/users"} component={Users}/>
         <Route path={"/questionset"} component={QuestionSet}/>

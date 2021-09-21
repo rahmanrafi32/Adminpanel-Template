@@ -1,8 +1,9 @@
 import React from 'react';
 import {styled} from "@mui/material/styles";
+import QuesForm from "./QuesForm";
 
 const Div = styled('div')(({theme}) => ({
-    marginLeft: 260,
+    marginLeft: 250,
     [theme.breakpoints.down('sm')]: {
         marginLeft: 0,
         width: 'auto',
@@ -12,7 +13,7 @@ const Div = styled('div')(({theme}) => ({
 const QuestionSet = () => {
     return (
         <Div>
-            <h1>This is questionSet page</h1>
+            <QuesForm/>
         </Div>
     );
 };
