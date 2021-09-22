@@ -1,14 +1,16 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {styled} from "@mui/material/styles";
 import {FormControl, Select, Typography, InputLabel, MenuItem, Button, IconButton, TextField} from "@mui/material";
-import {Close, ShortText} from "@mui/icons-material";
+import {AddCircleOutline, Close, ShortText} from "@mui/icons-material";
+import {QuestionSets} from "../../App";
+import {Link} from "react-router-dom";
 
 
 const Container = styled("div")(({theme}) => ({
     width: "50vw",
     margin: "10px auto",
     backgroundColor: "#fdfdfd",
-    padding: 25,
+    padding: 20,
 }));
 
 const HeaderTitle = styled(Typography)(({theme}) => ({
@@ -66,14 +68,7 @@ const Option = styled("div")(({theme}) => ({
 }));
 
 const CreateQues = () => {
-    const [questions, setQuestions] = useState([{
-        questionSetName: "",
-        questionText: "",
-        questionType: "radio",
-        options: [
-            {optionText: ""}
-        ]
-    }]);
+    const [questions, setQuestions] = useContext(QuestionSets);
 
     const addQuesSetName = (text) => {
         let newQuesName = [...questions];
@@ -119,70 +114,81 @@ const CreateQues = () => {
         console.log(i, k);
     };
 
+    const addAnotherQues = () =>{
+        setQuestions([
+            ...questions,
+            {questionText: "",
+                questionType: "radio",
+                options: [
+                    {optionText: ""}
+                ]
+            }]);
+    };
+
     const submitQuestion = () => {
         console.log("form submitted");
     };
 
-    const previewQuestion = () => {
-        console.log("question preview");
-    };
-    console.log(questions);
     return (
         <Container>
             <HeaderTitle variant={"h4"}>Create Question</HeaderTitle>
-            {questions.map((question, index) => <div key={index}>
-                <QuesSetName>
-                    <input type="text" placeholder={"Question Set Name"}
-                           onBlur={(event) => addQuesSetName(event.target.value)}/>
-                </QuesSetName>
-                <Question>
-                    {question.questionType === "text" ? <TextField
-                            label="Write your passage here"
-                            placeholder="Passage"
-                            multiline
-                        /> :
-                        <input type="text" placeholder={"Question"}
-                               onBlur={event => addQuesText(event.target.value, index)}/>}
-                    <FormControl variant="standard" sx={{m: 1, minWidth: 220}}>
-                        <InputLabel>Select Option</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={question[index]?.questionType}
-                            label="Age"
-                            onChange={event => changeQuesType(event.target.value, index)}
-                        >
-                            <MenuItem value={"text"}>Passage</MenuItem>
-                            <MenuItem value={"radio"}>Multiple Choice</MenuItem>
-                            <MenuItem value={"checkbox"}>True False</MenuItem>
-                            <MenuItem value={"File"}>File</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Question>
-                {question.options.map((option, j) => <Option>
-                    <div>
-                        {question.questionType !== "text" ? <><input type={question.questionType}/>
-                            <input type={"text"} style={{marginLeft:'10px'}}
-                                   onChange={e => ChangeOptionValue(e.target.value, index, j)}/>
-                            <IconButton aria-label="delete">
-                                <Close onClick={() => RemoveOption(index, j)}/>
-                            </IconButton></> :
-                            <> <input type={"text"} onChange={e => ChangeOptionValue(e.target.value, index, j)}/>
-                            <IconButton aria-label="delete">
-                                <Close onClick={() => RemoveOption(index, j)}/>
-                            </IconButton></>}
+            <QuesSetName>
+                <input type="text" placeholder={"Question Set Name"}
+                       onBlur={(event) => addQuesSetName(event.target.value)}/>
+            </QuesSetName>
+            {questions.map((question, index) =>
+                <div key={index}>
+                    <Question>
+                        {question.questionType === "file" ? <input type={question.questionType} placeholder={"Question"}
+                                                                   onBlur={event => addQuesText(event.target.value, index)}/> :
+                            <TextField
+                                label="Write your question here"
+                                placeholder="Questio"
+                                multiline
+                                fullWidth
+                                onBlur={event => addQuesText(event.target.value, index)}
+                            />}
+                        <FormControl variant="standard" sx={{m: 1, minWidth: 220}}>
+                            <InputLabel>Select Option</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={question[index]?.questionType}
+                                label="Age"
+                                onChange={event => changeQuesType(event.target.value, index)}
+                            >
+                                <MenuItem value={"text"}>Passage</MenuItem>
+                                <MenuItem value={"radio"}>Multiple Choice</MenuItem>
+                                <MenuItem value={"checkbox"}>True False</MenuItem>
+                                <MenuItem value={"file"}>File</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <AddCircleOutline sx={{color: "#5f6368"}} fontSize={"large"} onClick={addAnotherQues}/>
+                    </Question>
+                    {question.options.map((option, j) => <Option>
+                        <div>
+                            {(question.questionType !== "text" && question.questionType !== "file") ? <><input type={question.questionType}/>
+                                    <input type={"text"} style={{marginLeft:'10px'}}
+                                           onChange={e => ChangeOptionValue(e.target.value, index, j)}/>
+                                    <IconButton aria-label="delete">
+                                        <Close onClick={() => RemoveOption(index, j)}/>
+                                    </IconButton></> :
+                                <> <input type={"text"} onChange={e => ChangeOptionValue(e.target.value, index, j)}/>
+                                    <IconButton aria-label="delete">
+                                        <Close onClick={() => RemoveOption(index, j)}/>
+                                    </IconButton></>}
 
-                    </div>
-                </Option>)}
-                {question.options.length < 5 && (
-                    <div className="add_qus_body">
-                        <Button size="small" onClick={() => AddOption(index, question.questionType)}>Add option</Button>
-                    </div>
-                )}
-            </div>)}
-            <Button color={"secondary"} onClick={submitQuestion}>Submit</Button>
-            <Button color={"secondary"} onClick={previewQuestion}>Preview</Button>
-
+                        </div>
+                    </Option>)}
+                    {question.options.length < 5 && (
+                        <div>
+                            <Button color={"secondary"} size="small"
+                                    onClick={() => AddOption(index, question.questionType)}>Add option</Button>
+                        </div>
+                    )}
+                </div>)}
+            <Button color={"primary"} onClick={submitQuestion}>Submit</Button>
+            <Link to={'/preview'} style={{textDecoration:'none'}}>Preview</Link>
         </Container>
     );
 };
