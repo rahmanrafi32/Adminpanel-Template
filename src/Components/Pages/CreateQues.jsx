@@ -1,7 +1,7 @@
-import React, {useContext, useState} from "react";
+import React, {useContext} from "react";
 import {styled} from "@mui/material/styles";
 import {FormControl, Select, Typography, InputLabel, MenuItem, Button, IconButton, TextField} from "@mui/material";
-import {AddCircleOutline, Close, ShortText} from "@mui/icons-material";
+import {AddCircleOutline, Close} from "@mui/icons-material";
 import {QuestionSets} from "../../App";
 import {Link} from "react-router-dom";
 
@@ -129,6 +129,8 @@ const CreateQues = () => {
         console.log("form submitted");
     };
 
+    console.log(questions);
+
     return (
         <Container>
             <HeaderTitle variant={"h4"}>Create Question</HeaderTitle>
@@ -143,7 +145,7 @@ const CreateQues = () => {
                                                                    onBlur={event => addQuesText(event.target.value, index)}/> :
                             <TextField
                                 label="Write your question here"
-                                placeholder="Questio"
+                                placeholder="Question"
                                 multiline
                                 fullWidth
                                 onBlur={event => addQuesText(event.target.value, index)}

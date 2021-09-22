@@ -16,14 +16,12 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 
 const Div = styled('div')(({theme}) => ({
-    marginLeft: 260,
+    marginLeft: 250,
     [theme.breakpoints.down('sm')]: {
         marginLeft: 0,
         width: 'auto',
@@ -31,30 +29,27 @@ const Div = styled('div')(({theme}) => ({
 }));
 
 
-function createData(name, calories, fat, carbs, protein) {
+function createData(name, email, status, results) {
     return {
         name,
-        calories,
-        fat,
-        carbs,
-        protein,
+        email,
+        status,
+        results,
     };
 }
 
 const rows = [
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Donut', 452, 25.0, 51, 4.9),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Honeycomb', 408, 3.2, 87, 6.5),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Jelly Bean', 375, 0.0, 94, 0.0),
-    createData('KitKat', 518, 26.0, 65, 7.0),
-    createData('Lollipop', 392, 0.2, 98, 0.0),
-    createData('Marshmallow', 318, 0, 81, 2.0),
-    createData('Nougat', 360, 19.0, 9, 37.0),
-    createData('Oreo', 437, 18.0, 63, 4.0),
+    createData('wonder woman', 'x@gmail.com', 'active', 67 ),
+    createData('monalisa', 'x@gmail.com', 'active', 51 ),
+    createData('aria', 'x@gmail.com', 'active', 24 ),
+    createData('jhonny stark', 'x@gmail.com', 'active', 24 ),
+    createData('araya', 'x@gmail.com', 'active', 49 ),
+    createData('lenister', 'x@gmail.com', 'active', 87 ),
+    createData('joker', 'x@gmail.com', 'active', 65 ),
+    createData('batman', 'x@gmail.com', 'active', 98),
+    createData('spider man', 'x@gmail.com', 'active', 81),
+    createData('iron man', 'x@gmail.com', 'active', 9),
+    createData('ant man', 'x@gmail.com', 'active', 63 ),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -92,31 +87,25 @@ const headCells = [
         id: 'name',
         numeric: false,
         disablePadding: true,
-        label: 'Dessert (100g serving)',
+        label: 'Name',
     },
     {
-        id: 'calories',
-        numeric: true,
+        id: 'email',
+        numeric: false,
         disablePadding: false,
-        label: 'Calories',
+        label: 'Email',
     },
     {
-        id: 'fat',
-        numeric: true,
+        id: 'status',
+        numeric: false,
         disablePadding: false,
-        label: 'Fat (g)',
+        label: 'Status',
     },
     {
-        id: 'carbs',
+        id: 'results',
         numeric: true,
-        disablePadding: false,
-        label: 'Carbs (g)',
-    },
-    {
-        id: 'protein',
-        numeric: true,
-        disablePadding: false,
-        label: 'Protein (g)',
+        disablePadding: true,
+        label: 'Results',
     },
 ];
 
@@ -144,7 +133,7 @@ function EnhancedTableHead(props) {
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
+                        align={'center'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
@@ -201,10 +190,11 @@ const EnhancedTableToolbar = (props) => {
                 </Typography>
             ) : (
                 <Typography
-                    sx={{ flex: '1 1 100%' }}
+                    sx={{ flex: '1 1 100%'}}
                     variant="h6"
                     id="tableTitle"
                     component="div"
+                    color={"#aa3535"}
                 >
                     Users
                 </Typography>
@@ -231,12 +221,11 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable() {
+export default function UserTable() {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     const handleRequestSort = (event, property) => {
@@ -283,15 +272,7 @@ export default function EnhancedTable() {
         setPage(0);
     };
 
-    const handleChangeDense = (event) => {
-        setDense(event.target.checked);
-    };
-
     const isSelected = (name) => selected.indexOf(name) !== -1;
-
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
     return (
         <Div>
@@ -302,7 +283,6 @@ export default function EnhancedTable() {
                         <Table
                             sx={{ minWidth: 750 }}
                             aria-labelledby="tableTitle"
-                            size={dense ? 'small' : 'medium'}
                         >
                             <EnhancedTableHead
                                 numSelected={selected.length}
@@ -344,26 +324,17 @@ export default function EnhancedTable() {
                                                     component="th"
                                                     id={labelId}
                                                     scope="row"
+                                                    align={'center'}
                                                     padding="none"
                                                 >
                                                     {row.name}
                                                 </TableCell>
-                                                <TableCell align="right">{row.calories}</TableCell>
-                                                <TableCell align="right">{row.fat}</TableCell>
-                                                <TableCell align="right">{row.carbs}</TableCell>
-                                                <TableCell align="right">{row.protein}</TableCell>
+                                                <TableCell align="center">{row.email}</TableCell>
+                                                <TableCell align="center">{row.status}</TableCell>
+                                                <TableCell align="center">{row.results}</TableCell>
                                             </TableRow>
                                         );
                                     })}
-                                {emptyRows > 0 && (
-                                    <TableRow
-                                        style={{
-                                            height: (dense ? 33 : 53) * emptyRows,
-                                        }}
-                                    >
-                                        <TableCell colSpan={6} />
-                                    </TableRow>
-                                )}
                             </TableBody>
                         </Table>
                     </TableContainer>
@@ -377,10 +348,6 @@ export default function EnhancedTable() {
                         onRowsPerPageChange={handleChangeRowsPerPage}
                     />
                 </Paper>
-                <FormControlLabel
-                    control={<Switch checked={dense} onChange={handleChangeDense} />}
-                    label="Dense padding"
-                />
             </Box>
         </Div>
     );

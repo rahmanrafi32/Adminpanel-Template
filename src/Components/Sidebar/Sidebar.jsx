@@ -184,8 +184,8 @@ function Sidebar(props) {
             </Toolbar>
             <List>
                 {SidebarConfig.map((items, index) => (
-                    <MyLink to={items.path}  >
-                        <ListItem button sx={{}} key={index}>
+                    <MyLink to={items.path}  key={index}>
+                        <ListItem sx={{textAlign:'center'}} button>
                             <ListItemText primary={items.name}/>
                         </ListItem>
                     </MyLink>
