@@ -18,11 +18,11 @@ const Container = styled("div")(({theme}) => ({
     padding: 20,
 }));
 
-const OptionDiv  = styled('div')(({theme})=>({
-    display:'flex',
-    alignItems:'center',
-    '& input':{
-        marginRight:10
+const OptionDiv = styled('div')(({theme}) => ({
+    display: 'flex',
+    alignItems: 'center',
+    '& input': {
+        marginRight: 10
     }
 }))
 
@@ -37,8 +37,9 @@ const PreviewQues = () => {
                     <div key={index}>
                         <Typography variant={"h5"}>{index + 1}. {question.questionText}</Typography>
                         {question.options.map((option, j) => <OptionDiv key={j}>
-                            {question.questionType !== 'file' &&<><input type={question.questionType}/>
-                                <p>{option.optionText}</p></> }
+                            {(question.questionType !== 'file' && question.questionType !== 'text') &&
+                            <input type={question.questionType} disabled/>}
+                            <p>{option.optionText}</p>
                         </OptionDiv>)}
                     </div>
                 )}

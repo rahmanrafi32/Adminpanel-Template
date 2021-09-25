@@ -1,7 +1,17 @@
 import React, {useContext} from "react";
 import {styled} from "@mui/material/styles";
-import {FormControl, Select, Typography, InputLabel, MenuItem, Button, IconButton, TextField} from "@mui/material";
-import {AddCircleOutline, Close} from "@mui/icons-material";
+import {
+    FormControl,
+    Select,
+    Typography,
+    InputLabel,
+    MenuItem,
+    Button,
+    IconButton,
+    TextField,
+    Tooltip
+} from "@mui/material";
+import {AddCircleOutline, Close, DescriptionOutlined, FileCopy} from "@mui/icons-material";
 import {QuestionSets} from "../../App";
 import {Link} from "react-router-dom";
 
@@ -30,7 +40,7 @@ const QuesSetName = styled("div")(({theme}) => ({
         border: 0,
         fontSize: 20,
         "&:focus": {
-            borderBottom: "1px solid #d1d1d1"
+            borderBottom: "1px solid #aa3535"
         }
     }
 }));
@@ -114,20 +124,6 @@ const CreateQues = () => {
         console.log(i, k);
     };
 
-    const addAnotherQues = () =>{
-        setQuestions([
-            ...questions,
-            {questionText: "",
-                questionType: "radio",
-                options: [
-                    {optionText: ""}
-                ]
-            }]);
-    };
-
-    const submitQuestion = () => {
-        console.log("form submitted");
-    };
 
     console.log(questions);
 
@@ -139,7 +135,7 @@ const CreateQues = () => {
                        onBlur={(event) => addQuesSetName(event.target.value)}/>
             </QuesSetName>
             {questions.map((question, index) =>
-                <div key={index}>
+                <div key={index} style={{borderLeft:'7px solid #aa3535',marginBottom:'15px', borderRadius:8, padding:5}}>
                     <Question>
                         {question.questionType === "file" ? <input type={question.questionType} placeholder={"Question"}
                                                                    onBlur={event => addQuesText(event.target.value, index)}/> :
@@ -160,17 +156,20 @@ const CreateQues = () => {
                                 onChange={event => changeQuesType(event.target.value, index)}
                             >
                                 <MenuItem value={"text"}>Passage</MenuItem>
-                                <MenuItem value={"radio"}>Multiple Choice</MenuItem>
-                                <MenuItem value={"checkbox"}>True False</MenuItem>
+                                <MenuItem value={"checkbox"}>Multiple Choice</MenuItem>
+                                <MenuItem value={"radio"}>True False</MenuItem>
                                 <MenuItem value={"file"}>File</MenuItem>
                             </Select>
                         </FormControl>
-                        <AddCircleOutline sx={{color: "#5f6368"}} fontSize={"large"} onClick={addAnotherQues}/>
+                        <Tooltip title={"Add Passage"}>
+                            <DescriptionOutlined sx={{color: "#5f6368", marginTop:3}} fontSize={"large"} />
+                        </Tooltip>
                     </Question>
                     {question.options.map((option, j) => <Option>
                         <div>
-                            {(question.questionType !== "text" && question.questionType !== "file") ? <><input type={question.questionType}/>
-                                    <input type={"text"} style={{marginLeft:'10px'}}
+                            {(question.questionType !== "text" && question.questionType !== "file") ? <>
+                                    <input type={question.questionType} disabled/>
+                                    <input type={"text"} placeholder={`option ${j+1}`} style={{marginLeft:'10px'}}
                                            onChange={e => ChangeOptionValue(e.target.value, index, j)}/>
                                     <IconButton aria-label="delete">
                                         <Close onClick={() => RemoveOption(index, j)}/>
@@ -179,7 +178,6 @@ const CreateQues = () => {
                                     <IconButton aria-label="delete">
                                         <Close onClick={() => RemoveOption(index, j)}/>
                                     </IconButton></>}
-
                         </div>
                     </Option>)}
                     {question.options.length < 5 && (
@@ -188,9 +186,11 @@ const CreateQues = () => {
                                     onClick={() => AddOption(index, question.questionType)}>Add option</Button>
                         </div>
                     )}
+                    <br/>
+                    <div>
+                        <Button>Add Answer</Button>
+                    </div>
                 </div>)}
-            <Button color={"primary"} onClick={submitQuestion}>Submit</Button>
-            <Link to={'/preview'} style={{textDecoration:'none'}}>Preview</Link>
         </Container>
     );
 };

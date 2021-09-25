@@ -11,7 +11,6 @@ import QuestionSet from "./Components/Pages/QuestionSet";
 import Settings from "./Components/Pages/Settings";
 import NotFound from "./Components/Pages/404NotFound";
 import Sidebar from "./Components/Sidebar/Sidebar";
-import Login from "./Components/Pages/Login";
 import {createContext, useState} from "react";
 import PreviewQues from "./Components/Pages/PreviewQues";
 
@@ -22,6 +21,10 @@ function App() {
         questionSetName: "",
         questionText: "",
         questionType: "radio",
+        isPassage:false,
+        passages:[
+            {passage: ""}
+        ],
         options: [
             {optionText: ""}
         ]
@@ -31,8 +34,7 @@ function App() {
         <Router>
             <Sidebar/>
             <Switch>
-                <Route path={"/dashboard"} component={Dashboard}/>
-                <Route path={"/"} exact component={Login}/>
+                <Route path={"/"} exact component={Dashboard}/>
                 <Route path={"/admin"} component={Admins}/>
                 <Route path={"/users"} component={Users}/>
                 <Route path={"/questionset"} component={QuestionSet}/>
