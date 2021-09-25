@@ -124,6 +124,18 @@ const CreateQues = () => {
         console.log(i, k);
     };
 
+    const AddPassage = (i) => {
+        let newPassage = [...questions];
+        newPassage[i].isPassage = true;
+        setQuestions(newPassage);
+        console.log("clicked", i)
+    }
+
+    const AddNewPassage = (i) => {
+        let newPassage = [...questions];
+        newPassage[i].passages.push({passage: "Passage"});
+        setQuestions(newPassage);
+    };
 
     console.log(questions);
 
@@ -134,8 +146,28 @@ const CreateQues = () => {
                 <input type="text" placeholder={"Question Set Name"}
                        onBlur={(event) => addQuesSetName(event.target.value)}/>
             </QuesSetName>
+
             {questions.map((question, index) =>
-                <div key={index} style={{borderLeft:'7px solid #aa3535',marginBottom:'15px', borderRadius:8, padding:5}}>
+                <div key={index}
+                     style={{borderLeft: '7px solid #aa3535', marginBottom: '15px', borderRadius: 8, padding: 5}}>
+                    {question.passages.map((pass, k) => <div
+                        style={{display: 'flex', justifyContent: 'space-between', marginBottom: 5}}>
+                        {question.isPassage && <> <TextField
+                            label="Write your passage here"
+                            placeholder="Passage"
+                            multiline
+                            fullWidth
+                        />
+                            <Tooltip title={"Add Passage"}>
+                                <AddCircleOutline fontSize={"large"}
+                                                  sx={{marginTop: 1.5, marginLeft: 5, color: "#5f6368"}}
+                                                  onClick={() => AddNewPassage(index)}/>
+                            </Tooltip>
+                            <Close fontSize={"large"} sx={{marginTop: 1.5, marginLeft: 1, color: "#5f6368"}}/>
+                        </>
+                        }
+                    </div>)}
+
                     <Question>
                         {question.questionType === "file" ? <input type={question.questionType} placeholder={"Question"}
                                                                    onBlur={event => addQuesText(event.target.value, index)}/> :
@@ -162,14 +194,16 @@ const CreateQues = () => {
                             </Select>
                         </FormControl>
                         <Tooltip title={"Add Passage"}>
-                            <DescriptionOutlined sx={{color: "#5f6368", marginTop:3}} fontSize={"large"} />
+                            <DescriptionOutlined sx={{color: "#5f6368", marginTop: 3}} fontSize={"large"}
+                                                 onClick={() => AddPassage(index)}/>
                         </Tooltip>
                     </Question>
+
                     {question.options.map((option, j) => <Option>
                         <div>
                             {(question.questionType !== "text" && question.questionType !== "file") ? <>
                                     <input type={question.questionType} disabled/>
-                                    <input type={"text"} placeholder={`option ${j+1}`} style={{marginLeft:'10px'}}
+                                    <input type={"text"} placeholder={`option ${j + 1}`} style={{marginLeft: '10px'}}
                                            onChange={e => ChangeOptionValue(e.target.value, index, j)}/>
                                     <IconButton aria-label="delete">
                                         <Close onClick={() => RemoveOption(index, j)}/>
@@ -180,6 +214,7 @@ const CreateQues = () => {
                                     </IconButton></>}
                         </div>
                     </Option>)}
+
                     {question.options.length < 5 && (
                         <div>
                             <Button color={"secondary"} size="small"
@@ -191,6 +226,7 @@ const CreateQues = () => {
                         <Button>Add Answer</Button>
                     </div>
                 </div>)}
+
         </Container>
     );
 };

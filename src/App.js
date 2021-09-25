@@ -21,7 +21,7 @@ function App() {
         questionSetName: "",
         questionText: "",
         questionType: "radio",
-        isPassage:false,
+            isPassage:false,
         passages:[
             {passage: ""}
         ],
