@@ -29,10 +29,11 @@ const OptionDiv = styled('div')(({theme}) => ({
 
 const PreviewQues = () => {
     const [questions] = useContext(QuestionSets);
-
+    console.log(questions)
     return (
         <Div>
             <Container>
+                <Typography variant={"h3"} sx={{textAlign:'center', m:5}}>Set Name</Typography>
                 {questions.map((question, index) =>
                     <div key={index}>
                         {question.passages.map((passage, index) => <Typography key={index} variant={"h5"}>{passage.passage}</Typography>)}

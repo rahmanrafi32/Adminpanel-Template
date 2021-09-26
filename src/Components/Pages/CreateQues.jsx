@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import {AddCircleOutline, Close, DescriptionOutlined} from "@mui/icons-material";
 import {QuestionSets} from "../../App";
+import Fab from "@mui/material/Fab";
 
 
 const Container = styled("div")(({theme}) => ({
@@ -104,14 +105,10 @@ const CreateQues = () => {
         setQuestions(newOptions);
     };
 
-    const AddOption = (i, type) => {
+    const AddOption = (i) => {
         let newOption = [...questions];
-        if (newOption[i].options.length < 5) {
-            newOption[i].options.push({optionText: "option " + (newOption[i].options.length + 1)});
-            setQuestions(newOption);
-        } else {
-            alert("max option limit is 4");
-        }
+        newOption[i].options.push({optionText: "option " + (newOption[i].options.length + 1)});
+        setQuestions(newOption);
     };
 
     const RemoveOption = (i, k) => {
@@ -151,6 +148,14 @@ const CreateQues = () => {
             setQuestions(removePassages);
         }
     };
+
+    const removeQuestion = (i) => {
+        let removeQuestion = [...questions];
+        if (removeQuestion.length > 0) {
+            removeQuestion.splice(i, 1);
+            setQuestions(removeQuestion);
+        }
+    }
 
     return (
         <Container>
@@ -247,15 +252,20 @@ const CreateQues = () => {
                         </div>
                     </Option>)}
 
-                    {question.options.length < 5 && (
+                    {question.options.length && (
                         <div>
                             <Button color={"primary"} size="small"
                                     onClick={() => AddOption(index, question.questionType)}>Add option</Button>
                         </div>
                     )}
                     <br/>
-                    <div>
+                    <div style={{display: 'flex', justifyContent: 'space-between'}}>
                         <Button>Add Answer</Button>
+                        <Tooltip title={"Remove Question"}>
+                            <IconButton onClick={() => removeQuestion(index)}>
+                                <Close fontSize={"medium"}/>
+                            </IconButton>
+                        </Tooltip>
                     </div>
                 </div>
             )}

@@ -8,6 +8,7 @@ import {QuestionSets} from "../../App";
 import {Button, Tooltip} from "@mui/material";
 import {Link} from "react-router-dom";
 import theme from "./Theme";
+import {Close} from "@mui/icons-material";
 
 const Div = styled('div')(({theme}) => ({
     marginLeft: 250,
@@ -23,6 +24,7 @@ const Div = styled('div')(({theme}) => ({
 
 const QuestionSet = () => {
     const [questions, setQuestions] = useContext(QuestionSets);
+
     const addAnotherQues = () => {
         setQuestions([
             ...questions,
@@ -38,6 +40,7 @@ const QuestionSet = () => {
                 ]
             }]);
     };
+
 
     const submitQuestion = () => {
         console.log("form submitted");
