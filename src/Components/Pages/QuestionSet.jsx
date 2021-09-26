@@ -7,9 +7,11 @@ import CreateQues from "./CreateQues";
 import {QuestionSets} from "../../App";
 import {Button, Tooltip} from "@mui/material";
 import {Link} from "react-router-dom";
+import theme from "./Theme";
 
 const Div = styled('div')(({theme}) => ({
     marginLeft: 250,
+    marginBottom:20,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -27,6 +29,10 @@ const QuestionSet = () => {
             {
                 questionText: "",
                 questionType: "radio",
+                isPassage: false,
+                passages: [
+                    {passage: ""}
+                ],
                 options: [
                     {optionText: ""}
                 ]
@@ -48,7 +54,7 @@ const QuestionSet = () => {
                     </Fab>
                 </Tooltip>
                 <Button color={"primary"} sx={{width: '10vw'}} onClick={submitQuestion}>Submit</Button>
-                <Link to={'/preview'} style={{textDecoration: 'none'}}>Preview</Link>
+                <Link to={'/preview'} style={{textDecoration: 'none', color: theme.palette.primary.main}}>Preview</Link>
             </div>
         </Div>
     );

@@ -22,6 +22,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import {SidebarConfig} from "./SidebarConfig";
 import {Link} from "react-router-dom";
+import theme from "../Pages/Theme";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -180,7 +181,7 @@ function Sidebar(props) {
     const drawer = (
         <div>
             <Toolbar>
-                <Typography variant={"h4"} color={"#aa3535"}>IELTS Mate</Typography>
+                <Typography variant={"h4"} color={"primary"}>IELTS Mate</Typography>
             </Toolbar>
             <List>
                 {SidebarConfig.map((items, index) => (
@@ -201,7 +202,7 @@ function Sidebar(props) {
             <AppBar
                 position="static"
                 sx={{
-                    backgroundColor: ' #aa3535',
+                    backgroundColor:    theme.palette.primary.main,
                     width: {sm: `calc(100% - ${drawerWidth}px)`},
                     ml: {sm: `${drawerWidth}px`},
                 }}

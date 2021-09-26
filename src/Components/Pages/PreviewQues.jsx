@@ -29,12 +29,13 @@ const OptionDiv = styled('div')(({theme}) => ({
 
 const PreviewQues = () => {
     const [questions] = useContext(QuestionSets);
-    console.log(questions)
+
     return (
         <Div>
             <Container>
                 {questions.map((question, index) =>
                     <div key={index}>
+                        {question.passages.map((passage, index) => <Typography key={index} variant={"h5"}>{passage.passage}</Typography>)}
                         <Typography variant={"h5"}>{index + 1}. {question.questionText}</Typography>
                         {question.options.map((option, j) => <OptionDiv key={j}>
                             {(question.questionType !== 'file' && question.questionType !== 'text') &&

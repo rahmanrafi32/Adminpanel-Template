@@ -11,9 +11,8 @@ import {
     TextField,
     Tooltip
 } from "@mui/material";
-import {AddCircleOutline, Close, DescriptionOutlined, FileCopy} from "@mui/icons-material";
+import {AddCircleOutline, Close, DescriptionOutlined} from "@mui/icons-material";
 import {QuestionSets} from "../../App";
-import {Link} from "react-router-dom";
 
 
 const Container = styled("div")(({theme}) => ({
@@ -25,7 +24,7 @@ const Container = styled("div")(({theme}) => ({
 
 const HeaderTitle = styled(Typography)(({theme}) => ({
     textAlign: "center",
-    color: "#aa3535",
+    color: theme.palette.primary.main,
 
 }));
 
@@ -47,6 +46,7 @@ const QuesSetName = styled("div")(({theme}) => ({
 
 const Question = styled("div")(({theme}) => ({
     display: "flex",
+    flexDirection: 'column',
     justifyContent: "space-between",
     "& input": {
         outline: "none",
@@ -84,7 +84,6 @@ const CreateQues = () => {
         let newQuesName = [...questions];
         newQuesName.questionSetName = text;
         setQuestions(newQuesName);
-        console.log(text);
     };
 
     const changeQuesType = (type, i) => {
@@ -117,27 +116,41 @@ const CreateQues = () => {
 
     const RemoveOption = (i, k) => {
         let removeOptions = [...questions];
-        if (removeOptions[i].options.length > 1) {
+        if (removeOptions[i].options.length > 0) {
             removeOptions[i].options.splice(k, 1);
             setQuestions(removeOptions);
         }
-        console.log(i, k);
     };
 
     const AddPassage = (i) => {
         let newPassage = [...questions];
         newPassage[i].isPassage = true;
         setQuestions(newPassage);
-        console.log("clicked", i)
     }
 
     const AddNewPassage = (i) => {
         let newPassage = [...questions];
-        newPassage[i].passages.push({passage: "Passage"});
+        newPassage[i].passages.push({passage: ""});
         setQuestions(newPassage);
     };
 
-    console.log(questions);
+    const addPassage = (text, i, j) => {
+        let newPassage = [...questions];
+        newPassage[i].passages[j].passage = text;
+        setQuestions(newPassage);
+    }
+
+    const RemovePassage = (i, k) => {
+        let removePassages = [...questions];
+        if (removePassages[i].passages.length > 0) {
+            removePassages[i].passages.splice(k, 1);
+            if (removePassages[i].passages.length === 0) {
+                removePassages[i].isPassage = false
+                removePassages[i].passages.push({passage: "Passage"});
+            }
+            setQuestions(removePassages);
+        }
+    };
 
     return (
         <Container>
@@ -147,30 +160,67 @@ const CreateQues = () => {
                        onBlur={(event) => addQuesSetName(event.target.value)}/>
             </QuesSetName>
 
-            {questions.map((question, index) =>
-                <div key={index}
-                     style={{borderLeft: '7px solid #aa3535', marginBottom: '15px', borderRadius: 8, padding: 5}}>
-                    {question.passages.map((pass, k) => <div
-                        style={{display: 'flex', justifyContent: 'space-between', marginBottom: 5}}>
-                        {question.isPassage && <> <TextField
-                            label="Write your passage here"
-                            placeholder="Passage"
-                            multiline
-                            fullWidth
-                        />
-                            <Tooltip title={"Add Passage"}>
-                                <AddCircleOutline fontSize={"large"}
-                                                  sx={{marginTop: 1.5, marginLeft: 5, color: "#5f6368"}}
-                                                  onClick={() => AddNewPassage(index)}/>
-                            </Tooltip>
-                            <Close fontSize={"large"} sx={{marginTop: 1.5, marginLeft: 1, color: "#5f6368"}}/>
-                        </>
-                        }
-                    </div>)}
+            {questions.map((question, index) => <div key={index}
+                                                     style={{
+                                                         borderLeft: '7px solid #aa3535',
+                                                         marginBottom: '15px',
+                                                         borderRadius: 8,
+                                                         padding: 5
+                                                     }}>
 
                     <Question>
-                        {question.questionType === "file" ? <input type={question.questionType} placeholder={"Question"}
-                                                                   onBlur={event => addQuesText(event.target.value, index)}/> :
+                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                            <FormControl variant="standard" sx={{m: 1, minWidth: 220}}>
+                                <InputLabel>Passage</InputLabel>
+                                <Select
+                                    id="Passage"
+                                    value={question[index]?.questionType}
+                                    label="Passage"
+                                    onChange={event => changeQuesType(event.target.value, index)}
+                                >
+                                    <MenuItem value={"text"}>Passage</MenuItem>
+                                    <MenuItem value={"checkbox"}>Multiple Choice</MenuItem>
+                                    <MenuItem value={"radio"}>True False</MenuItem>
+                                    <MenuItem value={"file"}>File</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <Tooltip title={"Add Passage"}>
+                                <IconButton onClick={() => AddPassage(index)}>
+                                    <DescriptionOutlined sx={{color: "#5f6368"}} fontSize={"large"}/>
+                                </IconButton>
+                            </Tooltip>
+                        </div>
+
+                        {question.passages.map((pass, k) => <div key={k}
+                                                                 style={{
+                                                                     display: 'flex',
+                                                                     justifyContent: 'space-between',
+                                                                     marginBottom: 5
+                                                                 }}>
+                            {question.isPassage && <>
+                                <TextField
+                                    label="Write your passage here"
+                                    placeholder="Passage"
+                                    multiline
+                                    fullWidth
+                                    onBlur={(event) => addPassage(event.target.value, index, k)}
+                                />
+                                <Tooltip title={"Add Passage"}>
+                                    <IconButton onClick={() => AddNewPassage(index)}>
+                                        <AddCircleOutline fontSize={"large"}/>
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title={"Delete Passage"}>
+                                    <IconButton onClick={() => RemovePassage(index, k)}>
+                                        <Close fontSize={"large"}/>
+                                    </IconButton>
+                                </Tooltip>
+                            </>}
+                        </div>)}
+
+                        {question.questionType === "file" ?
+                            <input type={question.questionType} placeholder={"Question"}
+                                   onBlur={event => addQuesText(event.target.value, index)}/> :
                             <TextField
                                 label="Write your question here"
                                 placeholder="Question"
@@ -178,46 +228,28 @@ const CreateQues = () => {
                                 fullWidth
                                 onBlur={event => addQuesText(event.target.value, index)}
                             />}
-                        <FormControl variant="standard" sx={{m: 1, minWidth: 220}}>
-                            <InputLabel>Select Option</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={question[index]?.questionType}
-                                label="Age"
-                                onChange={event => changeQuesType(event.target.value, index)}
-                            >
-                                <MenuItem value={"text"}>Passage</MenuItem>
-                                <MenuItem value={"checkbox"}>Multiple Choice</MenuItem>
-                                <MenuItem value={"radio"}>True False</MenuItem>
-                                <MenuItem value={"file"}>File</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <Tooltip title={"Add Passage"}>
-                            <DescriptionOutlined sx={{color: "#5f6368", marginTop: 3}} fontSize={"large"}
-                                                 onClick={() => AddPassage(index)}/>
-                        </Tooltip>
                     </Question>
 
-                    {question.options.map((option, j) => <Option>
+                    {question.options.map((option, j) => <Option key={j}>
                         <div>
                             {(question.questionType !== "text" && question.questionType !== "file") ? <>
                                     <input type={question.questionType} disabled/>
                                     <input type={"text"} placeholder={`option ${j + 1}`} style={{marginLeft: '10px'}}
                                            onChange={e => ChangeOptionValue(e.target.value, index, j)}/>
-                                    <IconButton aria-label="delete">
-                                        <Close onClick={() => RemoveOption(index, j)}/>
+                                    <IconButton aria-label="delete" onClick={() => RemoveOption(index, j)}>
+                                        <Close/>
                                     </IconButton></> :
-                                <> <input type={"text"} onChange={e => ChangeOptionValue(e.target.value, index, j)}/>
-                                    <IconButton aria-label="delete">
-                                        <Close onClick={() => RemoveOption(index, j)}/>
+                                <> <input type={"text"}
+                                          onChange={e => ChangeOptionValue(e.target.value, index, j)}/>
+                                    <IconButton aria-label="delete" onClick={() => RemoveOption(index, j)}>
+                                        <Close/>
                                     </IconButton></>}
                         </div>
                     </Option>)}
 
                     {question.options.length < 5 && (
                         <div>
-                            <Button color={"secondary"} size="small"
+                            <Button color={"primary"} size="small"
                                     onClick={() => AddOption(index, question.questionType)}>Add option</Button>
                         </div>
                     )}
@@ -225,8 +257,8 @@ const CreateQues = () => {
                     <div>
                         <Button>Add Answer</Button>
                     </div>
-                </div>)}
-
+                </div>
+            )}
         </Container>
     );
 };
