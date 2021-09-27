@@ -13,8 +13,6 @@ import {
 } from "@mui/material";
 import {AddCircleOutline, Close, DescriptionOutlined} from "@mui/icons-material";
 import {QuestionSets} from "../../App";
-import Fab from "@mui/material/Fab";
-
 
 const Container = styled("div")(({theme}) => ({
     width: "50vw",
@@ -82,97 +80,120 @@ const CreateQues = () => {
     const [questions, setQuestions] = useContext(QuestionSets);
 
     const addQuesSetName = (text) => {
-        let newQuesName = [...questions];
+        let newQuesName = {...questions};
         newQuesName.questionSetName = text;
         setQuestions(newQuesName);
     };
 
     const changeQuesType = (type, i) => {
-        let newQuestionType = [...questions];
-        newQuestionType[i].questionType = type;
+        let newQuestionType = {...questions};
+        newQuestionType.questionSet[i].questionType = type;
         setQuestions(newQuestionType);
+        console.log("newQuestionType", newQuestionType)
     };
 
     const addQuesText = (text, i) => {
-        let newQuestionText = [...questions];
-        newQuestionText[i].questionText = text;
+        let newQuestionText = {...questions};
+        newQuestionText.questionSet[i].questionText = text;
         setQuestions(newQuestionText);
+        console.log("newQuestionText", newQuestionText);
     };
 
     const ChangeOptionValue = (text, i, j) => {
-        let newOptions = [...questions];
-        newOptions[i].options[j].optionText = text;
+        let newOptions = {...questions};
+        newOptions.questionSet[i].options[j].option = text;
         setQuestions(newOptions);
     };
 
     const AddOption = (i) => {
-        let newOption = [...questions];
-        newOption[i].options.push({optionText: "option " + (newOption[i].options.length + 1)});
+        let newOption = {...questions};
+        newOption.questionSet[i].options.push({option: "option " + (newOption.questionSet[i].options.length + 1)});
         setQuestions(newOption);
     };
 
     const RemoveOption = (i, k) => {
-        let removeOptions = [...questions];
-        if (removeOptions[i].options.length > 0) {
-            removeOptions[i].options.splice(k, 1);
+        let removeOptions = {...questions};
+        if (removeOptions.questionSet[i].options.length > 0) {
+            removeOptions.questionSet[i].options.splice(k, 1);
             setQuestions(removeOptions);
         }
     };
 
     const AddPassage = (i) => {
-        let newPassage = [...questions];
-        newPassage[i].isPassage = true;
+        let newPassage = {...questions};
+        newPassage.questionSet[i].isPassage = true;
         setQuestions(newPassage);
     }
 
     const AddNewPassage = (i) => {
-        let newPassage = [...questions];
-        newPassage[i].passages.push({passage: ""});
+        let newPassage = {...questions};
+        newPassage.questionSet[i].passages.push({passage: ""});
         setQuestions(newPassage);
     };
 
     const addPassage = (text, i, j) => {
-        let newPassage = [...questions];
-        newPassage[i].passages[j].passage = text;
+        let newPassage = {...questions};
+        newPassage.questionSet[i].passages[j].passage = text;
         setQuestions(newPassage);
     }
 
     const RemovePassage = (i, k) => {
-        let removePassages = [...questions];
-        if (removePassages[i].passages.length > 0) {
-            removePassages[i].passages.splice(k, 1);
-            if (removePassages[i].passages.length === 0) {
-                removePassages[i].isPassage = false
-                removePassages[i].passages.push({passage: "Passage"});
+        let removePassages = {...questions};
+        if (removePassages.questionSet[i].passages.length > 0) {
+            removePassages.questionSet[i].passages.splice(k, 1);
+            if (removePassages.questionSet[i].passages.length === 0) {
+                removePassages.questionSet[i].isPassage = false
+                removePassages.questionSet[i].passages.push({passage: "Passage"});
             }
             setQuestions(removePassages);
         }
     };
 
     const removeQuestion = (i) => {
-        let removeQuestion = [...questions];
-        if (removeQuestion.length > 0) {
-            removeQuestion.splice(i, 1);
+        let removeQuestion = {...questions};
+        if (removeQuestion.questionSet.length > 0) {
+            removeQuestion.questionSet.splice(i, 1);
             setQuestions(removeQuestion);
         }
     }
+
+    const createAnswerField = (i) => {
+        let newAnswer = {...questions};
+        newAnswer.questionSet[i].answers.push({answer: "Answer"});
+        setQuestions(newAnswer);
+    }
+    const addAnswers = (text, i, j) => {
+        let newAnswer = {...questions}
+        newAnswer.questionSet[i].answers[j].answer = text;
+        setQuestions(newAnswer);
+    }
+
+    const removeAnswers= (i,j)=>{
+        let removeOptions = {...questions};
+        if (removeOptions.questionSet[i].answers.length > 0) {
+            removeOptions.questionSet[i].answers.splice(j, 1);
+            setQuestions(removeOptions);
+        }
+    }
+
+    console.log(questions.questionSet)
 
     return (
         <Container>
             <HeaderTitle variant={"h4"}>Create Question</HeaderTitle>
             <QuesSetName>
                 <input type="text" placeholder={"Question Set Name"}
-                       onBlur={(event) => addQuesSetName(event.target.value)}/>
+                       onBlur={event => addQuesSetName(event.target.value)}/>
             </QuesSetName>
 
-            {questions.map((question, index) => <div key={index}
-                                                     style={{
-                                                         borderLeft: '7px solid #aa3535',
-                                                         marginBottom: '15px',
-                                                         borderRadius: 8,
-                                                         padding: 5
-                                                     }}>
-
+            {questions.questionSet.map((question, index) =>
+                <div key={index}
+                     style={{
+                         borderLeft: '7px solid #aa3535',
+                         marginBottom: '15px',
+                         borderRadius: 8,
+                         padding: 5
+                     }}>
                     <Question>
                         <div style={{display: 'flex', justifyContent: 'space-between'}}>
                             <FormControl variant="standard" sx={{m: 1, minWidth: 220}}>
@@ -252,15 +273,24 @@ const CreateQues = () => {
                         </div>
                     </Option>)}
 
-                    {question.options.length && (
-                        <div>
-                            <Button color={"primary"} size="small"
-                                    onClick={() => AddOption(index, question.questionType)}>Add option</Button>
-                        </div>
-                    )}
+                    <div>
+                        <Button color={"primary"} size="small"
+                                onClick={() => AddOption(index, question.questionType)}>Add option</Button>
+                    </div>
+
                     <br/>
+
+                    {question.answers.map((answer, j) => <Option key={j}><div>
+                            <input type={"text"} placeholder={"Answer"}
+                                   onChange={e => addAnswers(e.target.value, index, j)}/>
+                            <IconButton aria-label="delete" onClick={() => removeAnswers(index, j)} >
+                                <Close/>
+                            </IconButton>
+                        </div>
+                    </Option>)}
+
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                        <Button>Add Answer</Button>
+                        <Button onClick={() => createAnswerField(index)}>Add Answer</Button>
                         <Tooltip title={"Remove Question"}>
                             <IconButton onClick={() => removeQuestion(index)}>
                                 <Close fontSize={"medium"}/>

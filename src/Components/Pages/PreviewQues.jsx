@@ -33,15 +33,15 @@ const PreviewQues = () => {
     return (
         <Div>
             <Container>
-                <Typography variant={"h3"} sx={{textAlign:'center', m:5}}>Set Name</Typography>
-                {questions.map((question, index) =>
+                <Typography variant={"h3"} sx={{textAlign:'center', m:5}}>{questions.questionSetName}</Typography>
+                {questions.questionSet.map((question, index) =>
                     <div key={index}>
                         {question.passages.map((passage, index) => <Typography key={index} variant={"h5"}>{passage.passage}</Typography>)}
                         <Typography variant={"h5"}>{index + 1}. {question.questionText}</Typography>
                         {question.options.map((option, j) => <OptionDiv key={j}>
                             {(question.questionType !== 'file' && question.questionType !== 'text') &&
                             <input type={question.questionType} disabled/>}
-                            <p>{option.optionText}</p>
+                            <p>{option.option}</p>
                         </OptionDiv>)}
                     </div>
                 )}

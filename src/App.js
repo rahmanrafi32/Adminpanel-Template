@@ -19,18 +19,23 @@ import theme from './Components/Pages/Theme'
 export  const QuestionSets = createContext();
 
 function App() {
-    const [questions, setQuestions] = useState([{
+    const [questions, setQuestions] = useState({
         questionSetName: "",
-        questionText: "",
-        questionType: "radio",
-        isPassage:false,
-        passages:[
-            {passage: ""}
-        ],
-        options: [
-            {optionText: ""}
-        ]
-    }]);
+        questionSet:[{
+            questionText: "",
+            questionType: "radio",
+            isPassage:false,
+            passages:[
+                {passage: ""}
+            ],
+            options: [
+                {option: ""}
+            ],
+            answers:[
+                {answer:""}
+            ]
+        }]
+    });
   return (
     <ThemeProvider theme={theme}>
         <QuestionSets.Provider value={[questions, setQuestions]}>

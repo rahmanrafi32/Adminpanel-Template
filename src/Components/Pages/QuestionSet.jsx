@@ -25,21 +25,24 @@ const Div = styled('div')(({theme}) => ({
 const QuestionSet = () => {
     const [questions, setQuestions] = useContext(QuestionSets);
 
-    const addAnotherQues = () => {
-        setQuestions([
-            ...questions,
-            {
+        const addAnotherQues = () => {
+            let addAnotherQues = {...questions};
+            addAnotherQues.questionSet.push({
                 questionText: "",
                 questionType: "radio",
-                isPassage: false,
-                passages: [
+                isPassage:false,
+                passages:[
                     {passage: ""}
                 ],
                 options: [
-                    {optionText: ""}
+                    {option: ""}
+                ],
+                answers:[
+                    {answer:""}
                 ]
-            }]);
-    };
+            })
+            setQuestions(addAnotherQues)
+        };
 
 
     const submitQuestion = () => {
