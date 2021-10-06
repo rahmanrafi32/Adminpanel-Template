@@ -9,6 +9,16 @@ import {
 import {LockOpen} from '@mui/icons-material';
 import * as yup from 'yup';
 import {useFormik} from "formik";
+import {Link} from "react-router-dom";
+import theme from "./Theme";
+
+const Div = styled('div')(({theme}) => ({
+    marginLeft: 250,
+    [theme.breakpoints.down('sm')]: {
+        marginLeft: 0,
+        width: 'auto',
+    },
+}));
 
 const Container = styled("div")(({theme}) => ({
     width: "30vw",
@@ -58,47 +68,51 @@ const Login = () => {
         },
     });
 
+    console.log(formik.handleSubmit)
 
     return (
-        <Container>
-            <HeaderDiv>
-                <LockOpen color={"primary"} fontSize={"large"}/>
-                <br/>
-                <Typography variant={"h4"} color={"primary"}>Login</Typography>
-            </HeaderDiv>
-            <form onSubmit={formik.handleSubmit}>
-                <TextField
-                    fullWidth
-                    id="email"
-                    name="email"
-                    label="Email"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email && formik.errors.email}
-                    sx={{marginTop:3}}
-                />
-                <TextField
-                    fullWidth
-                    id="password"
-                    name="password"
-                    label="Password"
-                    type="password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    error={formik.touched.password && Boolean(formik.errors.password)}
-                    helperText={formik.touched.password && formik.errors.password}
-                    sx={{marginTop:3}}
-                />
-                <CheckBoxDiv>
-                    <Checkbox color={"primary"}/>
-                    <Typography variant={"caption"}>Remember Me</Typography>
-                </CheckBoxDiv>
-                <Button color="primary" variant="contained" fullWidth type="submit">
-                    Login
-                </Button>
-            </form>
-        </Container>
+        <Div>
+            <Container>
+                <HeaderDiv>
+                    <LockOpen color={"primary"} fontSize={"large"}/>
+                    <br/>
+                    <Typography variant={"h4"} color={"primary"}>Login</Typography>
+                </HeaderDiv>
+                <form onSubmit={formik.handleSubmit}>
+                    <TextField
+                        fullWidth
+                        id="email"
+                        name="email"
+                        label="Email"
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        error={formik.touched.email && Boolean(formik.errors.email)}
+                        helperText={formik.touched.email && formik.errors.email}
+                        sx={{marginTop: 3}}
+                    />
+                    <TextField
+                        fullWidth
+                        id="password"
+                        name="password"
+                        label="Password"
+                        type="password"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        error={formik.touched.password && Boolean(formik.errors.password)}
+                        helperText={formik.touched.password && formik.errors.password}
+                        sx={{marginTop: 3}}
+                    />
+                    <CheckBoxDiv>
+                        <Checkbox color={"primary"}/>
+                        <Typography variant={"caption"}>Remember Me</Typography>
+                    </CheckBoxDiv>
+                    <Button color="primary" variant="contained" fullWidth type="submit">
+                        Login
+                    </Button>
+                </form>
+                <Link style={{margin:10, color:theme.palette.primary.main}} to={"/forgotpassword"}>Forgot password?</Link>
+            </Container>
+        </Div>
     );
 };
 

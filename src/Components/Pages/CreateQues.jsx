@@ -176,7 +176,7 @@ const CreateQues = () => {
         }
     }
 
-    console.log(questions.questionSet)
+    console.log(questions)
 
     return (
         <Container>

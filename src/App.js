@@ -15,6 +15,7 @@ import {createContext, useState} from "react";
 import PreviewQues from "./Components/Pages/PreviewQues";
 import Login from "./Components/Pages/Login";
 import theme from './Components/Pages/Theme'
+import AddAdmin from "./Components/Pages/AddAdmin";
 
 export  const QuestionSets = createContext();
 
@@ -45,6 +46,7 @@ function App() {
                     <Route path={"/"} exact component={Login}/>
                     <Route path={"/dashboard"} component={Dashboard}/>
                     <Route path={"/admin"} component={Admins}/>
+                    <Route path={"/addAdmin"} component={AddAdmin}/>
                     <Route path={"/users"} component={Users}/>
                     <Route path={"/questionset"} component={QuestionSet}/>
                     <Route path={"/preview"} component={PreviewQues}/>
