@@ -122,7 +122,7 @@ export default function EnhancedTable() {
                                         return (
                                             <TableRow
                                                 hover
-                                                onClick={(event) => handleClick(event, row.name)}
+                                                onChange={(event) => handleClick(event, row.name)}
                                                 role="checkbox"
                                                 aria-checked={isItemSelected}
                                                 tabIndex={-1}
@@ -156,7 +156,7 @@ export default function EnhancedTable() {
                                                         <Select
                                                             labelId="demo-simple-select-standard-label"
                                                             id="demo-simple-select-standard"
-                                                            value={status}
+                                                            value={row.status}
                                                             onChange={handleChange}
                                                             label="Age"
                                                         >

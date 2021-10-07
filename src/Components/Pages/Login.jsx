@@ -64,12 +64,10 @@ const Login = () => {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2));
+            console.log("Submitted", formik.values)
         },
+
     });
-
-    console.log(formik.handleSubmit)
-
     return (
         <Div>
             <Container>

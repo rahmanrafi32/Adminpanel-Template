@@ -46,7 +46,6 @@ function App() {
                     <Route path={"/"} exact component={Login}/>
                     <Route path={"/dashboard"} component={Dashboard}/>
                     <Route path={"/admin"} component={Admins}/>
-                    <Route path={"/addAdmin"} component={AddAdmin}/>
                     <Route path={"/users"} component={Users}/>
                     <Route path={"/questionset"} component={QuestionSet}/>
                     <Route path={"/preview"} component={PreviewQues}/>

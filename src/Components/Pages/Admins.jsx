@@ -17,8 +17,7 @@ import EnhancedTableToolbar from "../Table/AdminTableToolbar";
 import {getComparator, stableSort} from "../Table/TableSortingFunctions";
 import {rows} from "../Table/FakeData";
 import {styled} from "@mui/material/styles";
-import {Button} from "@mui/material";
-import {Link} from 'react-router-dom';
+import AddAdmin from "./AddAdmin";
 
 
 const Div = styled('div')(({theme}) => ({
@@ -101,7 +100,9 @@ export default function EnhancedTable() {
     return (
         <Div>
             <Box sx={{width: "100%"}}>
-                <Link to={"/addAdmin"} style={{textDecoration:'none'}}><Button sx={{m:3}} variant={"contained"}>Add Admin</Button></Link>
+                <div style={{display: 'flex', justifyContent: 'flex-end', margin: 10}}>
+                    <AddAdmin/>
+                </div>
                 <Paper sx={{width: "100%", mb: 2}}>
                     <EnhancedTableToolbar numSelected={selected.length}/>
                     <TableContainer>
@@ -119,16 +120,16 @@ export default function EnhancedTable() {
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row, index) => {
                                         const isItemSelected = isSelected(row.name);
-                                        const labelId = `enhanced-table-checkbox-${index}`;
+                                        const labelId = `table-checkbox-${index}`;
 
                                         return (
                                             <TableRow
                                                 hover
-                                                onClick={(event) => handleClick(event, row.name)}
+                                                onChange={(event) => handleClick(event, row.name)}
                                                 role="checkbox"
                                                 aria-checked={isItemSelected}
                                                 tabIndex={-1}
-                                                key={row.name}
+                                                key={index}
                                                 selected={isItemSelected}
                                             >
                                                 <TableCell padding="checkbox">
@@ -156,11 +157,11 @@ export default function EnhancedTable() {
                                                         sx={{m: 1, minWidth: 120}}
                                                     >
                                                         <Select
-                                                            labelId="demo-simple-select-standard-label"
-                                                            id="demo-simple-select-standard"
-                                                            value={status}
+                                                            labelId="status"
+                                                            id="status"
+                                                            value={row.status}
                                                             onChange={handleChange}
-                                                            label="Age"
+                                                            label="Status"
                                                         >
                                                             <MenuItem value={"active"}>Active</MenuItem>
                                                             <MenuItem value={"banned"}>Banned</MenuItem>
