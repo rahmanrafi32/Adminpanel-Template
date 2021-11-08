@@ -1,0 +1,31 @@
+{
+  "payload": {
+    "year": 2010,
+    "examNo": 0,
+    "examType": "",
+    "sections": [
+      {
+        "sectionNo": 0,
+        "examRules": "",
+        "passage": "",
+        "audio": "",
+        "image": "",
+        "subSections": [
+          {
+            "examRules": "",
+            "image": "",
+            "questionText": "",
+            "questionType": "",
+            "passages": [],
+            "questionAndAns": [
+              {
+                "questionNumber": 0,
+                "queAndAns": ""
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
