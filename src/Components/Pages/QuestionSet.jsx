@@ -8,7 +8,6 @@ import { QuestionSets } from "../../App";
 import { Button, Tooltip } from "@mui/material";
 import { Link } from "react-router-dom";
 import theme from "./Theme";
-import { Close } from "@mui/icons-material";
 import { CREATE_EXAM_PAPER } from "../../Graphql/Mutations";
 import { useMutation } from "@apollo/client";
 
@@ -53,7 +52,7 @@ const QuestionSet = () => {
   return (
     <Div>
       <CreateQues />
-      <div>
+      {/* <div>
         <Tooltip title={"Add Question"}>
           <Fab color="primary" aria-label="add" onClick={addAnotherQues}>
             <AddIcon />
@@ -72,7 +71,7 @@ const QuestionSet = () => {
         >
           Preview
         </Link>
-      </div>
+      </div> */}
     </Div>
   );
 };

@@ -1,24 +1,35 @@
-import React, { useContext } from "react";
-import { styled } from "@mui/material/styles";
-import { CREATE_EXAM_PAPER } from "../../Graphql/Mutations";
-import { useMutation } from "@apollo/client";
-import {
-  FormControl,
-  Select,
-  Typography,
-  InputLabel,
-  MenuItem,
-  Button,
-  IconButton,
-  TextField,
-  Tooltip,
-} from "@mui/material";
 import {
   AddCircleOutline,
   Close,
-  DescriptionOutlined,
+  DescriptionOutlined
 } from "@mui/icons-material";
+import {
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Tooltip,
+  Typography
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import React, { useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { QuestionSets } from "../../App";
+import {
+  audioMain,
+  examNo,
+  examRulesMain,
+  examRulesSub,
+  examType,
+  examYear,
+  imageMain,
+  passageMain,
+  questionType,
+  sections,
+  subsectionPassage
+} from "../../features/createQuestionsSlice";
 
 const Container = styled("div")(({ theme }) => ({
   width: "50vw",
@@ -41,8 +52,9 @@ const QuesSetName = styled("div")(({ theme }) => ({
     outline: "none",
     width: "100%",
     backgroundColor: "#fdfdfd",
+    margin: "0 15px",
     border: 0,
-    fontSize: 20,
+    fontSize: 16,
     "&:focus": {
       borderBottom: "1px solid #aa3535",
     },
@@ -55,11 +67,11 @@ const Question = styled("div")(({ theme }) => ({
   justifyContent: "space-between",
   "& input": {
     outline: "none",
-    width: "50%",
-    marginTop: 25,
+    width: "30%",
+    margin: "20px 0",
     backgroundColor: "#fdfdfd",
     border: 0,
-    fontSize: 18,
+    fontSize: 16,
     "&:focus": {
       borderBottom: "1px solid #d1d1d1",
     },
@@ -83,9 +95,9 @@ const Option = styled("div")(({ theme }) => ({
 }));
 
 const CreateQues = () => {
-  const [questions, setQuestions] = useContext(QuestionSets);
+  const dispatch = useDispatch();
 
-  const [ExamPaper, { error }] = useMutation(CREATE_EXAM_PAPER);
+  const [questions, setQuestions] = useContext(QuestionSets);
 
   const addQuesSetName = (text) => {
     let newQuesName = { ...questions };
@@ -184,22 +196,141 @@ const CreateQues = () => {
     }
   };
 
+  const questionSet = useSelector((state) => state.createQuestion.questions);
+
+  console.log(questionSet);
+
   return (
     <Container>
       <HeaderTitle variant={"h4"}>Create Question</HeaderTitle>
       <QuesSetName>
-        <input type="text" placeholder={"Exam year"} />
-        <input type="text" placeholder={"Exam No."} />
-        <input type="text" placeholder={"Exam type"} />
-      </QuesSetName>
-      <QuesSetName>
         <input
           type="text"
-          placeholder={"Question Set Name"}
-          onBlur={(event) => addQuesSetName(event.target.value)}
+          placeholder={"Exam year"}
+          onBlur={(e) => dispatch(examYear(e.target.value))}
         />
+        <input
+          type="text"
+          placeholder={"Exam No."}
+          onBlur={(e) => dispatch(examNo(e.target.value))}
+        />
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 220 }}>
+          <InputLabel>Exam Type</InputLabel>
+          <Select
+            value={questionSet.examType}
+            label="question-type"
+            onChange={(event) => dispatch(examType(event.target.value))}
+          >
+            <MenuItem value={"Reading"}>Reading</MenuItem>
+            <MenuItem value={"Writing"}>Writing</MenuItem>
+            <MenuItem value={"Listening"}>Listening</MenuItem>
+          </Select>
+        </FormControl>
       </QuesSetName>
-      {questions.questionSet.map((question, index) => (
+      <div
+        style={{
+          borderLeft: "7px solid #aa3535",
+          marginBottom: "15px",
+          borderRadius: 8,
+          padding: 5,
+        }}
+      >
+        <Question>
+          <input
+            type="number"
+            placeholder={"Section No."}
+            onBlur={(event) => dispatch(sections(event.target.value))}
+          />
+          <TextField
+            sx={{ marginBottom: 2 }}
+            label="Exam rule"
+            placeholder="Exam Rule"
+            multiline
+            fullWidth
+            onChange={(event) => dispatch(examRulesMain(event.target.value))}
+          />
+          <TextField
+            label="Main Passage"
+            placeholder="Passage"
+            multiline
+            fullWidth
+            onChange={(event) => dispatch(passageMain(event.target.value))}
+          />
+          <div>
+            <label htmlFor="image">Upload image</label>
+            <input
+              id="image"
+              type="file"
+              onChange={(event) => dispatch(imageMain(event.target.value))}
+            />
+            <label htmlFor="image">Upload Audio</label>
+            <input
+              id="audio"
+              type="file"
+              onChange={(event) => dispatch(audioMain(event.target.value))}
+            />
+          </div>
+          <TextField
+            label="particuler question rule"
+            placeholder="Question Rule"
+            multiline
+            fullWidth
+            onChange={(event) => dispatch(examRulesSub(event.target.value))}
+          />
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 220 }}>
+              <InputLabel>Passage</InputLabel>
+              <Select
+                id="Passage"
+                value=""
+                label="Passage"
+                onChange={(e) => dispatch(questionType(e.target.value))}
+              >
+                <MenuItem value={"text"}>Passage</MenuItem>
+                <MenuItem value={"checkbox"}>Multiple Choice</MenuItem>
+                <MenuItem value={"radio"}>True False</MenuItem>
+                <MenuItem value={"file"}>File</MenuItem>
+              </Select>
+            </FormControl>
+            <Tooltip title={"Add Passage"}>
+              <IconButton>
+                <DescriptionOutlined
+                  sx={{ color: "#5f6368" }}
+                  fontSize={"large"}
+                />
+              </IconButton>
+            </Tooltip>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: 5,
+            }}
+          >
+            <TextField
+              label="Write your passage here"
+              placeholder="Passage"
+              multiline
+              fullWidth
+              onBlur={(event) =>
+                dispatch(subsectionPassage(event.target.value))
+              }
+            />
+            <Tooltip title={"Add Passage"}>
+              <IconButton>
+                <AddCircleOutline fontSize={"large"} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={"Delete Passage"}>
+              <IconButton>
+                <Close fontSize={"large"} />
+              </IconButton>
+            </Tooltip>
+          </div>
+        </Question>
+      </div>
+      {/* {questions.questionSet.map((question, index) => (
         <div
           key={index}
           style={{
@@ -210,68 +341,6 @@ const CreateQues = () => {
           }}
         >
           <Question>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <FormControl variant="standard" sx={{ m: 1, minWidth: 220 }}>
-                <InputLabel>Passage</InputLabel>
-                <Select
-                  id="Passage"
-                  value={question[index]?.questionType}
-                  label="Passage"
-                  onChange={(event) =>
-                    changeQuesType(event.target.value, index)
-                  }
-                >
-                  <MenuItem value={"text"}>Passage</MenuItem>
-                  <MenuItem value={"checkbox"}>Multiple Choice</MenuItem>
-                  <MenuItem value={"radio"}>True False</MenuItem>
-                  <MenuItem value={"file"}>File</MenuItem>
-                </Select>
-              </FormControl>
-              <Tooltip title={"Add Passage"}>
-                <IconButton onClick={() => AddPassage(index)}>
-                  <DescriptionOutlined
-                    sx={{ color: "#5f6368" }}
-                    fontSize={"large"}
-                  />
-                </IconButton>
-              </Tooltip>
-            </div>
-
-            {question.passages.map((pass, k) => (
-              <div
-                key={k}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: 5,
-                }}
-              >
-                {question.isPassage && (
-                  <>
-                    <TextField
-                      label="Write your passage here"
-                      placeholder="Passage"
-                      multiline
-                      fullWidth
-                      onBlur={(event) =>
-                        addPassage(event.target.value, index, k)
-                      }
-                    />
-                    <Tooltip title={"Add Passage"}>
-                      <IconButton onClick={() => AddNewPassage(index)}>
-                        <AddCircleOutline fontSize={"large"} />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title={"Delete Passage"}>
-                      <IconButton onClick={() => RemovePassage(index, k)}>
-                        <Close fontSize={"large"} />
-                      </IconButton>
-                    </Tooltip>
-                  </>
-                )}
-              </div>
-            ))}
-
             {question.questionType === "file" ? (
               <input
                 type={question.questionType}
@@ -371,7 +440,7 @@ const CreateQues = () => {
             </Tooltip>
           </div>
         </div>
-      ))}
+      ))} */}
     </Container>
   );
 };
