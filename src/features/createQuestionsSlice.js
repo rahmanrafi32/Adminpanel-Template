@@ -74,29 +74,26 @@ const createQuestionSlice = createSlice({
             );
         },
         questionText: ({questions}, {payload}) => {
-            questions.sections.map((section) =>
-                section.subSections.map(
-                    (subSection) =>
-                        subSection.questionAndAns.map(mainSet =>
-                            mainSet.queAndAns.question = payload)
+            questions.sections.map(section =>
+                section.subSections.map(subSection =>
+                    subSection.questionAndAns.map(mainSet =>
+                        mainSet.queAndAns.question = payload)
                 )
             );
         },
         questionType: ({questions}, {payload}) => {
-            questions.sections.map((section) =>
-                section.subSections.map(
-                    (subSection) =>
-                        subSection.questionAndAns.map(mainSet =>
-                            mainSet.queAndAns.questionType = payload)
+            questions.sections.map(section =>
+                section.subSections.map(subSection =>
+                    subSection.questionAndAns.map(mainSet =>
+                        mainSet.queAndAns.questionType = payload)
                 )
             );
         },
         addNewOptionField: ({questions}, {payload}) => {
-            questions.sections.map((section) =>
-                section.subSections.map(
-                    (subSection) =>
-                        subSection.questionAndAns.map(mainSet =>
-                            mainSet.queAndAns.options.push(""))
+            questions.sections.map(section =>
+                section.subSections.map(subSection =>
+                    subSection.questionAndAns.map(mainSet =>
+                        mainSet.queAndAns.options.push(payload))
                 )
             );
         },
@@ -108,6 +105,14 @@ const createQuestionSlice = createSlice({
                             mainSet.queAndAns.options.splice(payload, 1)
                         }
                     })
+                )
+            );
+        },
+        addAnswer: ({questions}, {payload}) => {
+            questions.sections.map((section) =>
+                section.subSections.map(subSection =>
+                    subSection.questionAndAns.map(mainSet =>
+                        mainSet.queAndAns.answer = payload)
                 )
             );
         },
@@ -141,7 +146,7 @@ const createQuestionSlice = createSlice({
         addNewPassage: ({questions}, {payload}) => {
             questions.sections.map((section) =>
                 section.subSections.map((subSection) =>
-                    subSection.passages.push("")
+                    subSection.passages.push(payload)
                 )
             );
         },
@@ -167,5 +172,6 @@ export const {
     removePassage,
     isPassage,
     addNewOptionField,
-    deleteNewOptionField
+    deleteNewOptionField,
+    addAnswer
 } = createQuestionSlice.actions;

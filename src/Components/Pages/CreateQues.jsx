@@ -15,9 +15,7 @@ import {
     Typography
 } from "@mui/material";
 import {styled} from "@mui/material/styles";
-import React, {useContext, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {QuestionSets} from "../../App";
 import {
     audioMain,
     examNo,
@@ -31,7 +29,11 @@ import {
     questionText,
     sections,
     addNewPassage,
-    subsectionPassage, removePassage, isPassage, addNewOptionField, deleteNewOptionField
+    subsectionPassage,
+    removePassage,
+    isPassage,
+    addNewOptionField,
+    deleteNewOptionField, addAnswer
 } from "../../features/createQuestionsSlice";
 
 const Container = styled("div")(({theme}) => ({
@@ -94,11 +96,8 @@ const Option = styled("div")(({theme}) => ({
 }));
 
 const CreateQues = () => {
-
     const dispatch = useDispatch();
-
     const questionSet = useSelector((state) => state.createQuestion.questions);
-
     return (
         <Container>
             <HeaderTitle variant={"h4"}>Create Question</HeaderTitle>
@@ -276,7 +275,7 @@ const CreateQues = () => {
                                     {
                                         subSection.questionAndAns.map(singleQuestion =>
                                             <>
-                                                {singleQuestion.queAndAns.options.map((option,optionIndex) =>
+                                                {singleQuestion.queAndAns.options.map((option, optionIndex) =>
                                                     <div>
                                                         <input type={"radio"} disabled/>
                                                         <input
@@ -287,7 +286,7 @@ const CreateQues = () => {
                                                         />
                                                         <IconButton
                                                             aria-label="delete"
-                                                            onClick={()=>dispatch(deleteNewOptionField(optionIndex))}
+                                                            onClick={() => dispatch(deleteNewOptionField(optionIndex))}
                                                         >
                                                             <Close/>
                                                         </IconButton>
@@ -301,10 +300,15 @@ const CreateQues = () => {
                                                     >
                                                         Add option
                                                     </Button>
-                                                </div>
-                                                <div style={{display: "flex", justifyContent: "space-between"}}>
+                                                    <br/>
+                                                    <input
+                                                        type={"text"}
+                                                        placeholder="Answer"
+                                                        style={{marginLeft: '10px'}}
+                                                        onBlur={(event) => dispatch(addAnswer(event.target.value))}
+                                                    />
                                                     <Button>Add Answer</Button>
-
+                                                    {console.log(singleQuestion.queAndAns.answer)}
                                                 </div>
                                             </>
                                         )
