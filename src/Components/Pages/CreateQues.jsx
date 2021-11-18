@@ -31,7 +31,7 @@ import {
     questionText,
     sections,
     addNewPassage,
-    subsectionPassage, removePassage, isPassage
+    subsectionPassage, removePassage, isPassage, addNewOptionField, deleteNewOptionField
 } from "../../features/createQuestionsSlice";
 
 const Container = styled("div")(({theme}) => ({
@@ -44,18 +44,17 @@ const Container = styled("div")(({theme}) => ({
 const HeaderTitle = styled(Typography)(({theme}) => ({
     textAlign: "center",
     color: theme.palette.primary.main,
+    fontSize: 30
 }));
 
 const QuesSetName = styled("div")(({theme}) => ({
-    height: "10vh",
     display: "flex",
     alignItems: "center",
-    padding: 5,
     "& input": {
         outline: "none",
         width: "100%",
         backgroundColor: "#fdfdfd",
-        margin: "0 15px",
+        margin: "0 10px",
         border: 0,
         fontSize: 16,
         "&:focus": {
@@ -71,7 +70,7 @@ const Question = styled("div")(({theme}) => ({
     "& input": {
         outline: "none",
         width: "30%",
-        margin: "20px 0",
+        margin: "10px 0",
         backgroundColor: "#fdfdfd",
         border: 0,
         fontSize: 16,
@@ -82,18 +81,15 @@ const Question = styled("div")(({theme}) => ({
 }));
 
 const Option = styled("div")(({theme}) => ({
-    padding: 5,
     display: "flex",
     flexDirection: "column",
-    "& div": {
-        margin: 5,
-        "& input": {
-            backgroundColor: "#fdfdfd",
-            border: "none",
-            outline: "none",
-            fontSize: 16,
-            borderBottom: "1px solid #d1d1d1",
-        },
+    "& input": {
+        backgroundColor: "#fdfdfd",
+        border: "none",
+        outline: "none",
+        margin: '15px 0',
+        fontSize: 18,
+        borderBottom: "1px solid #d1d1d1",
     },
 }));
 
@@ -110,7 +106,6 @@ const CreateQues = () => {
             setQuestions(removeQuestion);
         }
     };
-
     const createAnswerField = (i) => {
         let newAnswer = {...questions};
         newAnswer.questionSet[i].answers.push({answer: "Answer"});
@@ -171,7 +166,8 @@ const CreateQues = () => {
                     <input
                         type="number"
                         placeholder={"Section No."}
-                        onBlur={(event) => dispatch(sections(event.target.value))}
+                        onBlur={(event) =>
+                            dispatch(sections(event.target.value))}
                     />
                     <TextField
                         sx={{marginBottom: 2}}
@@ -179,27 +175,31 @@ const CreateQues = () => {
                         placeholder="Exam Rule"
                         multiline
                         fullWidth
-                        onChange={(event) => dispatch(examRulesMain(event.target.value))}
+                        onChange={(event) =>
+                            dispatch(examRulesMain(event.target.value))}
                     />
                     <TextField
                         label="Main Passage"
                         placeholder="Passage"
                         multiline
                         fullWidth
-                        onChange={(event) => dispatch(passageMain(event.target.value))}
+                        onChange={(event) =>
+                            dispatch(passageMain(event.target.value))}
                     />
                     <div>
                         <label htmlFor="image">Upload image</label>
                         <input
                             id="image"
                             type="file"
-                            onChange={(event) => dispatch(imageMain(event.target.value))}
+                            onChange={(event) =>
+                                dispatch(imageMain(event.target.value))}
                         />
                         <label htmlFor="image">Upload Audio</label>
                         <input
                             id="audio"
                             type="file"
-                            onChange={(event) => dispatch(audioMain(event.target.value))}
+                            onChange={(event) =>
+                                dispatch(audioMain(event.target.value))}
                         />
                     </div>
                 </Question>
@@ -212,16 +212,20 @@ const CreateQues = () => {
                     padding: 5,
                 }}
             >
-                <Question>
-                    <TextField
-                        label="particular question rule"
-                        placeholder="Question Rule"
-                        multiline
-                        fullWidth
-                        onChange={(event) => dispatch(examRulesSub(event.target.value))}
-                    />
-                    {
-                        questionSet.sections.map((question, indexIN) => question.subSections.map((subSection, indexOut) => <>
+                {
+                    questionSet.sections.map((question, indexIN) =>
+                        question.subSections.map((subSection, indexOut) =>
+                            <>
+                                <Question>
+                                    <TextField
+                                        label="particular question rule"
+                                        placeholder="Question Rule"
+                                        multiline
+                                        fullWidth
+                                        onChange={(event) =>
+                                            dispatch(examRulesSub(event.target.value))}
+                                    />
+
                                     <div key={indexOut}
                                          style={{display: "flex", justifyContent: "space-between"}}>
                                         <FormControl variant="standard" sx={{m: 1, minWidth: 220}}>
@@ -246,80 +250,98 @@ const CreateQues = () => {
                                                 />
                                             </IconButton>
                                         </Tooltip>
-
                                     </div>
-                                {console.log(subSection.passages)}
                                     {
-                                        subSection.passages.map((pass, indexPassage) => <div
-                                            style={{
-                                                display: "flex",
-                                                justifyContent: "space-between",
-                                                marginBottom: 5,
-                                            }}
-                                        >
-
-                                            {
-                                                !subSection.isPassage ? "" : <> <TextField
-                                                    label="Write your passage here"
-                                                    placeholder="Passage"
-                                                    multiline
-                                                    fullWidth
-                                                    onBlur={(event) =>
-                                                        dispatch(subsectionPassage({value: event.target.value, index: indexPassage}))
-                                                    }
-                                                />
-                                                    <Tooltip title={"Add Passage"}>
-                                                        <IconButton onClick={() => dispatch(addNewPassage(indexPassage))}>
-                                                            <AddCircleOutline fontSize={"large"}/>
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                    <Tooltip title={"Delete Passage"}>
-                                                        <IconButton onClick={()=>dispatch(removePassage(indexPassage))}>
-                                                            <Close fontSize={"large"}/>
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </>}
-                                        </div>)
-
+                                        subSection.passages.map((pass, indexPassage) =>
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                    justifyContent: "space-between",
+                                                    marginBottom: 5,
+                                                }}
+                                            >
+                                                {
+                                                    !subSection.isPassage ? "" :
+                                                        <>
+                                                            <TextField
+                                                                label="Write your passage here"
+                                                                placeholder="Passage"
+                                                                multiline
+                                                                fullWidth
+                                                                onBlur={(event) =>
+                                                                    dispatch(subsectionPassage({
+                                                                        value: event.target.value,
+                                                                        index: indexPassage
+                                                                    }))
+                                                                }
+                                                            />
+                                                            <Tooltip title={"Add Passage"}>
+                                                                <IconButton
+                                                                    onClick={() => dispatch(addNewPassage(indexPassage))}>
+                                                                    <AddCircleOutline fontSize={"large"}/>
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                            <Tooltip title={"Delete Passage"}>
+                                                                <IconButton
+                                                                    onClick={() => dispatch(removePassage(indexPassage))}>
+                                                                    <Close fontSize={"large"}/>
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                        </>
+                                                }
+                                            </div>
+                                        )
                                     }
-                                </>
-                            )
-                        )
-                    }
-                    <div>
-                        <TextField
-                            label="Write your question here"
-                            placeholder="Question"
-                            multiline
-                            fullWidth
-                            onBlur={event => dispatch(questionText(event.target.value))}
-                        />
-                    </div>
-                </Question>
-                <Option>
-                    <div>
-                        <input type={"radio"} disabled/>
-                        <input
-                            type={"text"}
-                            placeholder={`option`}
-                            style={{marginLeft: '10px'}}
-                        />
-                        <IconButton
-                            aria-label="delete"
-                        >
-                            <Close/>
-                        </IconButton>
+                                </Question>
+                                <Option>
+                                    <TextField
+                                        label="Write your question here"
+                                        placeholder="Question"
+                                        multiline
+                                        fullWidth
+                                        onBlur={event => dispatch(questionText(event.target.value))}
+                                    />
+                                    {
+                                        subSection.questionAndAns.map(singleQuestion =>
+                                            <>
+                                                {singleQuestion.queAndAns.options.map((option,optionIndex) =>
+                                                    <div>
+                                                        <input type={"radio"} disabled/>
+                                                        <input
+                                                            type={"text"}
+                                                            placeholder={`option`}
+                                                            style={{marginLeft: '10px'}}
+                                                            // onBlur={() => dispatch()}
+                                                        />
+                                                        <IconButton
+                                                            aria-label="delete"
+                                                            onClick={()=>dispatch(deleteNewOptionField(optionIndex))}
+                                                        >
+                                                            <Close/>
+                                                        </IconButton>
+                                                    </div>
+                                                )}
+                                                <div>
+                                                    <Button
+                                                        color={"primary"}
+                                                        size="small"
+                                                        onClick={() => dispatch(addNewOptionField(""))}
+                                                    >
+                                                        Add option
+                                                    </Button>
+                                                </div>
+                                                <div style={{display: "flex", justifyContent: "space-between"}}>
+                                                    <Button>Add Answer</Button>
 
-                    </div>
-                    <div>
-                        <Button
-                            color={"primary"}
-                            size="small"
-                        >
-                            Add option
-                        </Button>
-                    </div>
-                </Option>
+                                                </div>
+                                            </>
+                                        )
+                                    }
+                                </Option>
+                            </>
+                        )
+                    )
+                }
             </div>
             {/* {questions.questionSet.map((question, index) => (
         <div
@@ -456,7 +478,7 @@ const CreateQues = () => {
               </IconButton>
             </Tooltip>
           </div>
-        </div>
+         </div>
       ))} */}
         </Container>
     );

@@ -17,7 +17,7 @@ const initialState = {
                         examRules: "",
                         image: "",
                         questionText: "",
-                        questionType: "radio",
+                        questionType: "",
                         isPassage: false,
                         passages: [""],
                         questionAndAns: [
@@ -25,8 +25,8 @@ const initialState = {
                                 questionNumber: 0,
                                 queAndAns: {
                                     question: "",
-                                    questionType: "",
-                                    options: [],
+                                    questionType: "radio",
+                                    options: [""],
                                     answer: ""
                                 }
                             },
@@ -76,14 +76,38 @@ const createQuestionSlice = createSlice({
         questionText: ({questions}, {payload}) => {
             questions.sections.map((section) =>
                 section.subSections.map(
-                    (subSection) => (subSection.questionText = payload)
+                    (subSection) =>
+                        subSection.questionAndAns.map(mainSet =>
+                            mainSet.queAndAns.question = payload)
                 )
             );
         },
         questionType: ({questions}, {payload}) => {
             questions.sections.map((section) =>
                 section.subSections.map(
-                    (subSection) => (subSection.questionType = payload)
+                    (subSection) =>
+                        subSection.questionAndAns.map(mainSet =>
+                            mainSet.queAndAns.questionType = payload)
+                )
+            );
+        },
+        addNewOptionField: ({questions}, {payload}) => {
+            questions.sections.map((section) =>
+                section.subSections.map(
+                    (subSection) =>
+                        subSection.questionAndAns.map(mainSet =>
+                            mainSet.queAndAns.options.push(""))
+                )
+            );
+        },
+        deleteNewOptionField: ({questions}, {payload}) => {
+            questions.sections.map(section =>
+                section.subSections.map(subSection =>
+                    subSection.questionAndAns.map(mainSet => {
+                        if (mainSet.queAndAns.options.length > 0) {
+                            mainSet.queAndAns.options.splice(payload, 1)
+                        }
+                    })
                 )
             );
         },
@@ -141,5 +165,7 @@ export const {
     subsectionPassage,
     addNewPassage,
     removePassage,
-    isPassage
+    isPassage,
+    addNewOptionField,
+    deleteNewOptionField
 } = createQuestionSlice.actions;
