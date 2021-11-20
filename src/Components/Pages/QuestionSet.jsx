@@ -1,16 +1,15 @@
-import React, {useContext} from "react";
+import React from "react";
 import {styled} from "@mui/material/styles";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-
 import CreateQues from "./CreateQues";
-import {QuestionSets} from "../../App";
 import {Button, IconButton, Tooltip} from "@mui/material";
 import {Link} from "react-router-dom";
 import theme from "./Theme";
 import {CREATE_EXAM_PAPER} from "../../Graphql/Mutations";
 import {useMutation} from "@apollo/client";
-import {Close} from "@mui/icons-material";
+import {useDispatch, useSelector} from "react-redux";
+import {addNewQuestionField} from "../../features/createQuestionsSlice";
 
 const Div = styled("div")(({theme}) => ({
     marginLeft: 250,
@@ -25,37 +24,50 @@ const Div = styled("div")(({theme}) => ({
 }));
 
 const QuestionSet = () => {
-    const [questions, setQuestions] = useContext(QuestionSets);
+    const questionSet = useSelector((state) => state.createQuestion.questions);
+
+    const dispatch = useDispatch();
 
     const [ExamPaper, {error}] = useMutation(CREATE_EXAM_PAPER);
 
-    const addAnotherQues = () => {
-        let addAnotherQues = {...questions};
-        addAnotherQues.questionSet.push({
-            questionText: "",
-            questionType: "radio",
-            isPassage: false,
-            passages: [{passage: ""}],
-            options: [{option: ""}],
-            answers: [{answer: ""}],
-        });
-        setQuestions(addAnotherQues);
+    let addAnotherQues = {
+        examRules: "",
+        image: "",
+        questionText: "",
+        questionType: "",
+        isPassage: false,
+        passages: [""],
+        questionAndAns: [
+            {
+                questionNumber: 0,
+                queAndAns: {
+                    question: "",
+                    questionType: "radio",
+                    options: [""],
+                    answer: ""
+                }
+            },
+        ],
     };
 
-    const submitQuestion = async () => {
-        await ExamPaper({
-            variables: {
-                payload: {...questions},
-            },
-        });
-    };
+    // const submitQuestion = async () => {
+    //     await ExamPaper({
+    //         variables: {
+    //             payload: {},
+    //         },
+    //     });
+    // };
+
+    const submitQuestion = () =>{
+        console.log(questionSet)
+    }
 
     return (
         <Div>
             <CreateQues/>
             <div>
                 <Tooltip title={"Add Question"}>
-                    <Fab color="primary" aria-label="add">
+                    <Fab color="primary" aria-label="add" onClick={() => dispatch(addNewQuestionField(addAnotherQues))}>
                         <AddIcon/>
                     </Fab>
                 </Tooltip>
@@ -77,12 +89,6 @@ const QuestionSet = () => {
                         Preview
                     </Button>
                 </Link>
-                <Button
-                    color={"primary"}
-                    sx={{width: "10vw"}}
-                >
-                    Delete Question
-                </Button>
             </div>
         </Div>
     );

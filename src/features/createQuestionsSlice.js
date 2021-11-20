@@ -52,26 +52,32 @@ const createQuestionSlice = createSlice({
             questions.examType = payload;
         },
         sections: ({questions}, {payload}) => {
-            questions.sections.map((section) => (section.sectionNo = payload));
+            questions.sections.map(section => (section.sectionNo = payload));
         },
         examRulesMain: ({questions}, {payload}) => {
-            questions.sections.map((section) => (section.examRules = payload));
+            questions.sections.map(section => (section.examRules = payload));
         },
         passageMain: ({questions}, {payload}) => {
-            questions.sections.map((section) => (section.passage = payload));
+            questions.sections.map(section => (section.passage = payload));
         },
         audioMain: ({questions}, {payload}) => {
-            questions.sections.map((section) => (section.audio = payload));
+            questions.sections.map(section => (section.audio = payload));
         },
         imageMain: ({questions}, {payload}) => {
-            questions.sections.map((section) => (section.image = payload));
+            questions.sections.map(section => (section.image = payload));
         },
         examRulesSub: ({questions}, {payload}) => {
-            questions.sections.map((section) =>
-                section.subSections.map(
-                    (subSection) => (subSection.examRules = payload)
-                )
-            );
+            questions.sections.map(section =>
+                section.subSections[payload.index].examRules = payload.value
+            )
+        },
+        addNewQuestionField: ({questions}, {payload}) => {
+            questions.sections.map(section =>
+                section.subSections.push(payload));
+        },
+        deleteQuestionField: ({questions}, {payload}) => {
+            questions.sections.map(section =>
+                section.subSections.splice(payload, 1));
         },
         questionText: ({questions}, {payload}) => {
             questions.sections.map(section =>
@@ -83,36 +89,37 @@ const createQuestionSlice = createSlice({
         },
         questionType: ({questions}, {payload}) => {
             questions.sections.map(section =>
-                section.subSections.map(subSection =>
-                    subSection.questionAndAns.map(mainSet =>
-                        mainSet.queAndAns.questionType = payload)
+                section.subSections[payload.index].questionAndAns.map(mainSet =>
+                    mainSet.queAndAns.questionType = payload.value
                 )
-            );
+            )
         },
         addNewOptionField: ({questions}, {payload}) => {
             questions.sections.map(section =>
-                section.subSections.map(subSection =>
-                    subSection.questionAndAns.map(mainSet =>
-                        mainSet.queAndAns.options.push(payload))
+                section.subSections[payload.subSectionIndex].questionAndAns.map(mainSet =>
+                        mainSet.queAndAns.options.push(payload.value)
                 )
+            );
+        },
+        addNewOption: ({questions}, {payload}) => {
+            questions.sections.map(section =>
+                section.subSections[payload.subSectionIndex].questionAndAns.map(mainSet =>
+                        mainSet.queAndAns.options[payload.optionIndex] = payload.value)
             );
         },
         deleteNewOptionField: ({questions}, {payload}) => {
             questions.sections.map(section =>
-                section.subSections.map(subSection =>
-                    subSection.questionAndAns.map(mainSet => {
+                section.subSections[payload.subSectionIndex].questionAndAns.map(mainSet => {
                         if (mainSet.queAndAns.options.length > 0) {
-                            mainSet.queAndAns.options.splice(payload, 1)
+                            mainSet.queAndAns.options.splice(payload.optionIndex, 1)
                         }
                     })
-                )
             );
         },
         addAnswer: ({questions}, {payload}) => {
-            questions.sections.map((section) =>
-                section.subSections.map(subSection =>
-                    subSection.questionAndAns.map(mainSet =>
-                        mainSet.queAndAns.answer = payload)
+            questions.sections.map(section =>
+                section.subSections[payload.subSectionIndex].questionAndAns.map(mainSet =>
+                        mainSet.queAndAns.answer = payload.value
                 )
             );
         },
@@ -131,8 +138,8 @@ const createQuestionSlice = createSlice({
             );
         },
         removePassage: ({questions}, {payload}) => {
-            questions.sections.map((section) =>
-                section.subSections.map((subSection) => {
+            questions.sections.map(section =>
+                section.subSections.map(subSection => {
                     if (subSection.passages.length > 0) {
                         subSection.passages.splice(payload, 1);
                         if (subSection.passages.length === 0) {
@@ -143,9 +150,9 @@ const createQuestionSlice = createSlice({
                 })
             );
         },
-        addNewPassage: ({questions}, {payload}) => {
-            questions.sections.map((section) =>
-                section.subSections.map((subSection) =>
+        addNewPassageField: ({questions}, {payload}) => {
+            questions.sections.map(section =>
+                section.subSections.map(subSection =>
                     subSection.passages.push(payload)
                 )
             );
@@ -168,10 +175,12 @@ export const {
     questionText,
     questionType,
     subsectionPassage,
-    addNewPassage,
+    addNewPassageField,
     removePassage,
     isPassage,
     addNewOptionField,
     deleteNewOptionField,
-    addAnswer
+    addAnswer, addNewOption,
+    addNewQuestionField,
+    deleteQuestionField
 } = createQuestionSlice.actions;

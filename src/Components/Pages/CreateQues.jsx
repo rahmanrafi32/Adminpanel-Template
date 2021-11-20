@@ -28,13 +28,14 @@ import {
     questionType,
     questionText,
     sections,
-    addNewPassage,
+    addNewPassageField,
     subsectionPassage,
     removePassage,
     isPassage,
     addNewOptionField,
-    deleteNewOptionField, addAnswer
+    deleteNewOptionField, addAnswer, addNewOption, deleteQuestionField
 } from "../../features/createQuestionsSlice";
+import React from "react";
 
 const Container = styled("div")(({theme}) => ({
     width: "50vw",
@@ -175,150 +176,173 @@ const CreateQues = () => {
                     </div>
                 </Question>
             </div>
-            <div
-                style={{
-                    borderLeft: "7px solid #aa3535",
-                    marginBottom: "15px",
-                    borderRadius: 8,
-                    padding: 5,
-                }}
-            >
-                {
-                    questionSet.sections.map((question, indexIN) =>
-                        question.subSections.map((subSection, indexOut) =>
-                            <>
-                                <Question>
-                                    <TextField
-                                        label="particular question rule"
-                                        placeholder="Question Rule"
-                                        multiline
-                                        fullWidth
-                                        onChange={(event) =>
-                                            dispatch(examRulesSub(event.target.value))}
-                                    />
-
-                                    <div key={indexOut}
-                                         style={{display: "flex", justifyContent: "space-between"}}>
-                                        <FormControl variant="standard" sx={{m: 1, minWidth: 220}}>
-                                            <InputLabel>Passage</InputLabel>
-                                            <Select
-                                                id="Passage"
-                                                value={subSection.questionType}
-                                                label="Passage"
-                                                onChange={(e) => dispatch(questionType(e.target.value))}
-                                            >
-                                                <MenuItem value={"text"}>Passage</MenuItem>
-                                                <MenuItem value={"checkbox"}>Multiple Choice</MenuItem>
-                                                <MenuItem value={"radio"}>True False</MenuItem>
-                                                <MenuItem value={"file"}>File</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                        <Tooltip title={"Add Passage"}>
-                                            <IconButton onClick={() => dispatch(isPassage(true))}>
-                                                <DescriptionOutlined
-                                                    sx={{color: "#5f6368"}}
-                                                    fontSize={"large"}
-                                                />
-                                            </IconButton>
-                                        </Tooltip>
-                                    </div>
-                                    {
-                                        subSection.passages.map((pass, indexPassage) =>
-                                            <div
-                                                style={{
-                                                    display: "flex",
-                                                    justifyContent: "space-between",
-                                                    marginBottom: 5,
-                                                }}
-                                            >
-                                                {
-                                                    !subSection.isPassage ? "" :
-                                                        <>
-                                                            <TextField
-                                                                label="Write your passage here"
-                                                                placeholder="Passage"
-                                                                multiline
-                                                                fullWidth
-                                                                onBlur={(event) =>
-                                                                    dispatch(subsectionPassage({
-                                                                        value: event.target.value,
-                                                                        index: indexPassage
-                                                                    }))
-                                                                }
-                                                            />
-                                                            <Tooltip title={"Add Passage"}>
-                                                                <IconButton
-                                                                    onClick={() => dispatch(addNewPassage(indexPassage))}>
-                                                                    <AddCircleOutline fontSize={"large"}/>
-                                                                </IconButton>
-                                                            </Tooltip>
-                                                            <Tooltip title={"Delete Passage"}>
-                                                                <IconButton
-                                                                    onClick={() => dispatch(removePassage(indexPassage))}>
-                                                                    <Close fontSize={"large"}/>
-                                                                </IconButton>
-                                                            </Tooltip>
-                                                        </>
-                                                }
-                                            </div>
-                                        )
-                                    }
-                                </Question>
-                                <Option>
-                                    <TextField
-                                        label="Write your question here"
-                                        placeholder="Question"
-                                        multiline
-                                        fullWidth
-                                        onBlur={event => dispatch(questionText(event.target.value))}
-                                    />
-                                    {
-                                        subSection.questionAndAns.map(singleQuestion =>
-                                            <>
-                                                {singleQuestion.queAndAns.options.map((option, optionIndex) =>
-                                                    <div>
-                                                        <input type={"radio"} disabled/>
-                                                        <input
-                                                            type={"text"}
-                                                            placeholder={`option`}
-                                                            style={{marginLeft: '10px'}}
-                                                            // onBlur={() => dispatch()}
+            {
+                questionSet.sections.map((section, sectionIndex) =>
+                    section.subSections.map((subSection, subSectionIndex) =>
+                        <div
+                            key={subSectionIndex}
+                            style={{
+                                borderLeft: "7px solid #aa3535",
+                                marginBottom: "15px",
+                                borderRadius: 8,
+                                padding: 5,
+                            }}
+                        >
+                            <Question>
+                                <TextField
+                                    label="particular question rule"
+                                    placeholder="Question Rule"
+                                    multiline
+                                    fullWidth
+                                    value={subSection.examRules}
+                                    onChange={(event) =>
+                                        dispatch(examRulesSub({value:event.target.value, index:subSectionIndex}))}
+                                />
+                                {
+                                    subSection.passages.map((pass, indexPassage) =>
+                                        <div
+                                            key={indexPassage}
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "space-between",
+                                                marginBottom: 5,
+                                            }}
+                                        >
+                                            {
+                                                !subSection.isPassage ? "" :
+                                                    <>
+                                                        <TextField
+                                                            label="Write your passage here"
+                                                            placeholder="Passage"
+                                                            multiline
+                                                            fullWidth
+                                                            value={pass}
+                                                            onChange={(event) =>
+                                                                dispatch(subsectionPassage({
+                                                                    value: event.target.value,
+                                                                    index: indexPassage
+                                                                }))
+                                                            }
+                                                            sx={{margin: 1}}
                                                         />
-                                                        <IconButton
-                                                            aria-label="delete"
-                                                            onClick={() => dispatch(deleteNewOptionField(optionIndex))}
-                                                        >
-                                                            <Close/>
-                                                        </IconButton>
-                                                    </div>
-                                                )}
-                                                <div>
-                                                    <Button
-                                                        color={"primary"}
-                                                        size="small"
-                                                        onClick={() => dispatch(addNewOptionField(""))}
+                                                        <Tooltip title={"Add Passage"}>
+                                                            <IconButton
+                                                                disableRipple
+                                                                onClick={() => dispatch(addNewPassageField(""))}>
+                                                                <AddCircleOutline fontSize={"medium"}
+                                                                                  sx={{color: "#aa3535"}}/>
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                        <Tooltip title={"Delete Passage"}>
+                                                            <IconButton
+                                                                disableRipple
+                                                                onClick={() => dispatch(removePassage(indexPassage))}>
+                                                                <Close fontSize={"medium"}
+                                                                       sx={{color: "#aa3535"}}/>
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                    </>
+                                            }
+                                        </div>
+                                    )
+                                }
+                            </Question>
+                            <Option>
+                                {
+                                    subSection.questionAndAns.map((singleQuestion,singleQuesIndex) =>
+                                        <div key={singleQuesIndex}>
+                                            <div style={{display: "flex", justifyContent: "space-between"}}>
+                                                <FormControl variant="standard" sx={{m: 1, minWidth: 220}}>
+                                                    <InputLabel>Passage</InputLabel>
+                                                    <Select
+                                                        id="Passage"
+                                                        value={singleQuestion.queAndAns.questionType}
+                                                        label="Passage"
+                                                        onChange={(e) => dispatch(questionType({value:e.target.value,index:subSectionIndex}))}
                                                     >
-                                                        Add option
-                                                    </Button>
-                                                    <br/>
+                                                        <MenuItem value={"text"}>Passage</MenuItem>
+                                                        <MenuItem value={"radio"}>Multiple Choice</MenuItem>
+                                                        <MenuItem value={"checkbox"}>True False</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                                <Tooltip title={"Add Passage"}>
+                                                    <IconButton disableRipple
+                                                                onClick={() => dispatch(isPassage(true))}>
+                                                        <DescriptionOutlined
+                                                            sx={{color: "#aa3535"}}
+                                                            fontSize={"medium"}
+                                                        />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </div>
+                                            <TextField
+                                                label="Write your question here"
+                                                placeholder="Question"
+                                                multiline
+                                                fullWidth
+                                                onBlur={event => dispatch(questionText(event.target.value))}
+                                            />
+                                            {singleQuestion.queAndAns.options.map((option, optionIndex) =>
+                                                <div key={optionIndex}>
                                                     <input
                                                         type={"text"}
-                                                        placeholder="Answer"
+                                                        value={singleQuestion.queAndAns.options[optionIndex]}
+                                                        placeholder={`option ${optionIndex + 1}`}
                                                         style={{marginLeft: '10px'}}
-                                                        onBlur={(event) => dispatch(addAnswer(event.target.value))}
+                                                        onChange={(event) => dispatch(addNewOption({
+                                                            value: event.target.value,
+                                                            optionIndex,
+                                                            subSectionIndex
+                                                        }))}
                                                     />
-                                                    <Button>Add Answer</Button>
-                                                    {console.log(singleQuestion.queAndAns.answer)}
+                                                    <IconButton
+                                                        aria-label="delete"
+                                                        onClick={() => dispatch(deleteNewOptionField({optionIndex, subSectionIndex}))}
+                                                    >
+                                                        <Close sx={{color: "#aa3535"}}/>
+                                                    </IconButton>
                                                 </div>
-                                            </>
-                                        )
-                                    }
-                                </Option>
-                            </>
-                        )
+                                            )}
+                                            <div>
+                                                <Button
+                                                    color={"primary"}
+                                                    size="small"
+                                                    onClick={() => dispatch(addNewOptionField({value:"", subSectionIndex}))}
+                                                >
+                                                    Add option
+                                                </Button>
+                                                <br/>
+
+                                                <div style={{
+                                                    display:"flex",
+                                                    justifyContent:'space-between'
+                                                }}>
+                                                    <div>
+                                                        <input
+                                                            type={"text"}
+                                                            placeholder="Answer"
+                                                            style={{marginLeft: '10px'}}
+                                                            onBlur={(event) => dispatch(addAnswer({value:event.target.value, subSectionIndex}))}
+                                                        />
+                                                        <Button>Add Answer</Button>
+                                                    </div>
+                                                    <Button
+                                                        color={"primary"}
+                                                        sx={{width: "10vw"}}
+                                                        onClick={()=>dispatch(deleteQuestionField(subSectionIndex))}
+                                                    >
+                                                        Delete Question
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            </Option>
+                        </div>
                     )
-                }
-            </div>
+                )
+            }
         </Container>
     );
 };
