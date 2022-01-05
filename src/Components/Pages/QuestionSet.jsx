@@ -44,7 +44,7 @@ const QuestionSet = () => {
                     question: "",
                     questionType: "radio",
                     options: [""],
-                    answer: ""
+                    answer: [""]
                 }
             },
         ],
@@ -58,7 +58,7 @@ const QuestionSet = () => {
     //     });
     // };
 
-    const submitQuestion = () =>{
+    const submitQuestion = () => {
         console.log(questionSet)
     }
 
@@ -71,6 +71,10 @@ const QuestionSet = () => {
                         <AddIcon/>
                     </Fab>
                 </Tooltip>
+            </div>
+            <div style={{
+                paddingTop:25
+            }}>
                 <Button
                     color={"primary"}
                     sx={{width: "10vw"}}

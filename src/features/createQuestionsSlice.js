@@ -27,7 +27,7 @@ const initialState = {
                                     question: "",
                                     questionType: "radio",
                                     options: [""],
-                                    answer: ""
+                                    answer: [""]
                                 }
                             },
                         ],
@@ -97,30 +97,45 @@ const createQuestionSlice = createSlice({
         addNewOptionField: ({questions}, {payload}) => {
             questions.sections.map(section =>
                 section.subSections[payload.subSectionIndex].questionAndAns.map(mainSet =>
-                        mainSet.queAndAns.options.push(payload.value)
+                    mainSet.queAndAns.options.push(payload.value)
+                )
+            );
+        },
+        addNewAnswerField: ({questions}, {payload}) => {
+            questions.sections.map(section =>
+                section.subSections[payload.subSectionIndex].questionAndAns.map(mainSet =>
+                    mainSet.queAndAns.answer.push(payload.value)
                 )
             );
         },
         addNewOption: ({questions}, {payload}) => {
             questions.sections.map(section =>
                 section.subSections[payload.subSectionIndex].questionAndAns.map(mainSet =>
-                        mainSet.queAndAns.options[payload.optionIndex] = payload.value)
+                    mainSet.queAndAns.options[payload.optionIndex] = payload.value)
+            );
+        },
+        addNewAnswer: ({questions}, {payload}) => {
+            questions.sections.map(section =>
+                section.subSections[payload.subSectionIndex].questionAndAns.map(mainSet =>
+                    mainSet.queAndAns.answer[payload.answerIndex] = payload.value)
             );
         },
         deleteNewOptionField: ({questions}, {payload}) => {
             questions.sections.map(section =>
                 section.subSections[payload.subSectionIndex].questionAndAns.map(mainSet => {
-                        if (mainSet.queAndAns.options.length > 0) {
-                            mainSet.queAndAns.options.splice(payload.optionIndex, 1)
-                        }
-                    })
+                    if (mainSet.queAndAns.options.length > 0) {
+                        mainSet.queAndAns.options.splice(payload.optionIndex, 1)
+                    }
+                })
             );
         },
-        addAnswer: ({questions}, {payload}) => {
+        deleteNewAnswerField: ({questions}, {payload}) => {
             questions.sections.map(section =>
-                section.subSections[payload.subSectionIndex].questionAndAns.map(mainSet =>
-                        mainSet.queAndAns.answer = payload.value
-                )
+                section.subSections[payload.subSectionIndex].questionAndAns.map(mainSet => {
+                    if (mainSet.queAndAns.answer.length > 0) {
+                        mainSet.queAndAns.answer.splice(payload.optionIndex, 1)
+                    }
+                })
             );
         },
         isPassage: ({questions}, {payload}) => {
@@ -180,7 +195,9 @@ export const {
     isPassage,
     addNewOptionField,
     deleteNewOptionField,
-    addAnswer, addNewOption,
+    addNewOption, addNewAnswer,
     addNewQuestionField,
-    deleteQuestionField
+    addNewAnswerField,
+    deleteQuestionField,
+    deleteNewAnswerField
 } = createQuestionSlice.actions;
