@@ -34,7 +34,6 @@ import {
     isPassage,
     addNewOptionField,
     deleteNewOptionField,
-    addAnswer,
     addNewOption,
     deleteQuestionField,
     addNewAnswerField,
@@ -261,6 +260,7 @@ const CreateQues = () => {
                             {
                                 subSection.questionAndAns.map((singleQuestion, singleQuesIndex) =>
                                     <div key={singleQuesIndex}>
+                                        {/*selecting question type*/}
                                         <div style={{display: "flex", justifyContent: "space-between"}}>
                                             <FormControl variant="standard" sx={{m: 1, minWidth: 220}}>
                                                 <InputLabel>Question Type</InputLabel>
@@ -290,6 +290,8 @@ const CreateQues = () => {
                                                 </IconButton>
                                             </Tooltip>
                                         </div>
+
+                                        {/*writing question or selecting an image for question*/}
                                         {
                                             (singleQuestion.queAndAns.questionType === "file") ? <input type="file" onChange={event => dispatch(questionText(event.target.value))}/> :
                                                 <TextField
@@ -301,8 +303,9 @@ const CreateQues = () => {
                                                 />
                                         }
 
+                                        {/*add option and delete option*/}
                                         {singleQuestion.queAndAns.options.map((option, optionIndex) =>
-                                            //add option and delete option
+
                                             <div key={optionIndex}>
                                                 <input
                                                     type={"text"}
@@ -338,6 +341,8 @@ const CreateQues = () => {
                                             Add option
                                         </Button>
                                         <br/>
+
+                                        {/*add answer*/}
                                         {singleQuestion.queAndAns.answer.map((ans, answerIndex) =>
                                             //add option and delete option
                                             <div key={answerIndex}>
