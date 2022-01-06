@@ -344,11 +344,10 @@ const CreateQues = () => {
 
                                         {/*add answer*/}
                                         {singleQuestion.queAndAns.answer.map((ans, answerIndex) =>
-                                            //add option and delete option
                                             <div key={answerIndex}>
                                                 <input
                                                     type={"text"}
-                                                    value={singleQuestion.queAndAns.options[answerIndex]}
+                                                    value={singleQuestion.queAndAns.answer[answerIndex]}
                                                     placeholder={`Answer ${answerIndex + 1}`}
                                                     style={{marginLeft: '10px'}}
                                                     onChange={(event) => dispatch(addNewAnswer({
