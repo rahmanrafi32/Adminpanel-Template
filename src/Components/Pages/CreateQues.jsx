@@ -110,12 +110,18 @@ const CreateQues = () => {
             <input
                 type="text"
                 placeholder={"Exam year"}
-                onBlur={(e) => dispatch(examYear(e.target.value))}
+                onBlur={(e) => {
+                    let year = parseInt(e.target.value)
+                    return dispatch(examYear(year));
+                }}
             />
             <input
                 type="text"
                 placeholder={"Exam No."}
-                onBlur={(e) => dispatch(examNo(e.target.value))}
+                onBlur={(e) => {
+                    let exam = parseInt(e.target.value)
+                    return dispatch(examNo(exam));
+                }}
             />
             <FormControl variant="standard" sx={{m: 1, minWidth: 220}}>
                 <InputLabel>Exam Type</InputLabel>
@@ -140,10 +146,12 @@ const CreateQues = () => {
         >
             <Question>
                 <input
-                    type="number"
+                    type="text"
                     placeholder={"Section No."}
-                    onBlur={(event) =>
-                        dispatch(sections(event.target.value))}
+                    onBlur={(e) => {
+                        let section = parseInt(e.target.value);
+                        return dispatch(sections(section))
+                    }}
                 />
                 <TextField
                     sx={{marginBottom: 2}}
@@ -166,14 +174,14 @@ const CreateQues = () => {
                     display: "flex",
                     justifyContent: 'space-between'
                 }}>
-                    <label htmlFor="image" style={{padding:8}}><strong>Upload image</strong></label>
+                    <label htmlFor="image" style={{padding: 8}}><strong>Upload image</strong></label>
                     <input
                         id="image"
                         type="file"
                         onChange={(event) =>
                             dispatch(imageMain(event.target.value))}
                     />
-                    <label htmlFor="audio" style={{padding:8}}><strong>Upload Audio</strong></label>
+                    <label htmlFor="audio" style={{padding: 8}}><strong>Upload Audio</strong></label>
                     <input
                         id="audio"
                         type="file"
@@ -235,7 +243,7 @@ const CreateQues = () => {
                                                     <Tooltip title={"Add Passage"}>
                                                         <IconButton
                                                             disableRipple
-                                                            sx={{p:2}}
+                                                            sx={{p: 2}}
                                                             onClick={() => dispatch(addNewPassageField(""))}>
                                                             <AddCircleOutline fontSize={"medium"}
                                                                               sx={{color: "#aa3535"}}/>
@@ -244,7 +252,7 @@ const CreateQues = () => {
                                                     <Tooltip title={"Delete Passage"}>
                                                         <IconButton
                                                             disableRipple
-                                                            sx={{p:2}}
+                                                            sx={{p: 2}}
                                                             onClick={() => dispatch(removePassage(indexPassage))}>
                                                             <Close fontSize={"medium"}
                                                                    sx={{color: "#aa3535"}}/>
@@ -281,7 +289,7 @@ const CreateQues = () => {
                                             </FormControl>
                                             <Tooltip title={"Add Passage"}>
                                                 <IconButton disableRipple
-                                                            sx={{p:2}}
+                                                            sx={{p: 2}}
                                                             onClick={() => dispatch(isPassage(true))}>
                                                     <DescriptionOutlined
                                                         sx={{color: "#aa3535"}}
@@ -293,7 +301,8 @@ const CreateQues = () => {
 
                                         {/*writing question or selecting an image for question*/}
                                         {
-                                            (singleQuestion.queAndAns.questionType === "file") ? <input type="file" onChange={event => dispatch(questionText(event.target.value))}/> :
+                                            (singleQuestion.queAndAns.questionType === "file") ? <input type="file"
+                                                                                                        onChange={event => dispatch(questionText(event.target.value))}/> :
                                                 <TextField
                                                     label="Write your question here"
                                                     placeholder="Question"
@@ -320,7 +329,7 @@ const CreateQues = () => {
                                                 />
                                                 <IconButton
                                                     aria-label="delete"
-                                                    sx={{p:2}}
+                                                    sx={{p: 2}}
                                                     onClick={() => dispatch(deleteNewOptionField({
                                                         optionIndex,
                                                         subSectionIndex
@@ -358,7 +367,7 @@ const CreateQues = () => {
                                                 />
                                                 <IconButton
                                                     aria-label="delete"
-                                                    sx={{p:2}}
+                                                    sx={{p: 2}}
                                                     onClick={() => dispatch(deleteNewAnswerField({
                                                         answerIndex,
                                                         subSectionIndex

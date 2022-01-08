@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 import reportWebVitals from "./reportWebVitals";
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
+  uri: "https://github.com/consoleit-bd/ielts-mate-backend.git",
   cache: new InMemoryCache(),
 });
 

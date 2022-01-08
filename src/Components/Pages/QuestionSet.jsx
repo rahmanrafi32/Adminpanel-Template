@@ -50,17 +50,15 @@ const QuestionSet = () => {
         ],
     };
 
-    // const submitQuestion = async () => {
-    //     await ExamPaper({
-    //         variables: {
-    //             payload: {},
-    //         },
-    //     });
-    // };
+    const submitQuestion = async () => {
+        await ExamPaper({
+            variables: {
+                payload: questionSet
+            }
+        });
 
-    const submitQuestion = () => {
         console.log(questionSet)
-    }
+    };
 
     return (
         <Div>
@@ -73,7 +71,7 @@ const QuestionSet = () => {
                 </Tooltip>
             </div>
             <div style={{
-                paddingTop:25
+                paddingTop: 25
             }}>
                 <Button
                     color={"primary"}

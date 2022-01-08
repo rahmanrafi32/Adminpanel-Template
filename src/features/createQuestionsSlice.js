@@ -1,41 +1,41 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
-    questions: {
-        year: 0,
-        examNo: 0,
-        examType: "",
-        sections: [
-            {
-                sectionNo: 0,
-                examRules: "",
-                passage: "",
-                audio: "",
-                image: "",
-                subSections: [
-                    {
-                        examRules: "",
-                        image: "",
-                        questionText: "",
-                        questionType: "",
-                        isPassage: false,
-                        passages: [""],
-                        questionAndAns: [
-                            {
-                                questionNumber: 0,
-                                queAndAns: {
-                                    question: "",
-                                    questionType: "radio",
-                                    options: [""],
-                                    answer: [""]
-                                }
-                            },
-                        ],
-                    },
-                ],
-            },
-        ],
-    },
+        questions: {
+            year: 0,
+            examNo: 0,
+            examType: "",
+            sections: [
+                {
+                    sectionNo: 0,
+                    examRules: "",
+                    passage: "",
+                    audio: "",
+                    image: "",
+                    subSections: [
+                        {
+                            examRules: "",
+                            image: "",
+                            questionText: "",
+                            questionType: "",
+                            isPassage: false,
+                            passages: [""],
+                            questionAndAns: [
+                                {
+                                    questionNumber: 0,
+                                    queAndAns: {
+                                        question: "",
+                                        questionType: "radio",
+                                        options: [""],
+                                        answer: [""]
+                                    }
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
 };
 
 const createQuestionSlice = createSlice({
