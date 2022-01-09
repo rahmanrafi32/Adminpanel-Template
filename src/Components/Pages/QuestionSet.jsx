@@ -1,9 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
 import {styled} from "@mui/material/styles";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import CreateQues from "./CreateQues";
-import {Button, IconButton, Tooltip} from "@mui/material";
+import {Button, Tooltip} from "@mui/material";
 import {Link} from "react-router-dom";
 import theme from "./Theme";
 import {CREATE_EXAM_PAPER} from "../../Graphql/Mutations";
@@ -24,6 +24,7 @@ const Div = styled("div")(({theme}) => ({
 }));
 
 const QuestionSet = () => {
+    const [submit, setSubmit] = useState(false);
     const questionSet = useSelector((state) => state.createQuestion.questions);
 
     const dispatch = useDispatch();
@@ -51,13 +52,12 @@ const QuestionSet = () => {
     };
 
     const submitQuestion = async () => {
+        setSubmit(true);
         await ExamPaper({
             variables: {
                 payload: questionSet
             }
         });
-
-        console.log(questionSet)
     };
 
     return (
@@ -92,6 +92,12 @@ const QuestionSet = () => {
                     </Button>
                 </Link>
             </div>
+            {
+                (submit && !error) && <h4 style={{color: "green"}}>Submitted</h4>
+            }
+            {
+                error && <p style={{color: "red"}}>Error on submitting</p>
+            }
         </Div>
     );
 };
