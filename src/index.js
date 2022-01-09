@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 import reportWebVitals from "./reportWebVitals";
 
 const client = new ApolloClient({
-  uri: "https://github.com/consoleit-bd/ielts-mate-backend.git",
+  uri: "https://ielts-app-api.herokuapp.com/",
   cache: new InMemoryCache(),
 });
 
