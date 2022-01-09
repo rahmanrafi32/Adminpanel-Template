@@ -1,26 +1,26 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import "./index.css";
-import { store } from "./app/store";
-import { Provider } from "react-redux";
+import {store} from "./app/store";
+import {Provider} from "react-redux";
 import reportWebVitals from "./reportWebVitals";
 
 const client = new ApolloClient({
-  uri: "https://ielts-app-api.herokuapp.com/",
-  cache: new InMemoryCache(),
+    uri: "https://ielts-app-api.herokuapp.com/graphql",
+    cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </ApolloProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
+    <React.StrictMode>
+        <ApolloProvider client={client}>
+            <Provider store={store}>
+                <App/>
+            </Provider>
+        </ApolloProvider>
+    </React.StrictMode>,
+    document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
