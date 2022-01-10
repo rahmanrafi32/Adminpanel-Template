@@ -41,6 +41,7 @@ import {
     addNewAnswer
 } from "../../features/createQuestionsSlice";
 import React from "react";
+import login from "./Login";
 
 const Container = styled("div")(({theme}) => ({
     width: "50vw",
@@ -229,6 +230,7 @@ const CreateQues = () => {
                                                     <TextField
                                                         label="Write your passage here"
                                                         placeholder="Passage"
+                                                        value={subSection.passages[indexPassage]}
                                                         multiline
                                                         fullWidth
                                                         value={pass}
@@ -244,7 +246,10 @@ const CreateQues = () => {
                                                         <IconButton
                                                             disableRipple
                                                             sx={{p: 2}}
-                                                            onClick={() => dispatch(addNewPassageField(""))}>
+                                                            onClick={() => dispatch(addNewPassageField({
+                                                                value: "",
+                                                                index: subSectionIndex
+                                                            }))}>
                                                             <AddCircleOutline fontSize={"medium"}
                                                                               sx={{color: "#aa3535"}}/>
                                                         </IconButton>
@@ -253,7 +258,14 @@ const CreateQues = () => {
                                                         <IconButton
                                                             disableRipple
                                                             sx={{p: 2}}
-                                                            onClick={() => dispatch(removePassage(indexPassage))}>
+                                                            onClick={() => {
+                                                                console.log("sub:", subSectionIndex, "pass:", indexPassage);
+                                                                dispatch(removePassage({
+                                                                    subIndex: subSectionIndex,
+                                                                    passIndex: indexPassage
+                                                                }))
+                                                            }
+                                                            }>
                                                             <Close fontSize={"medium"}
                                                                    sx={{color: "#aa3535"}}/>
                                                         </IconButton>
@@ -290,7 +302,10 @@ const CreateQues = () => {
                                             <Tooltip title={"Add Passage"}>
                                                 <IconButton disableRipple
                                                             sx={{p: 2}}
-                                                            onClick={() => dispatch(isPassage(true))}>
+                                                            onClick={() => dispatch(isPassage({
+                                                                value: true,
+                                                                index: subSectionIndex
+                                                            }))}>
                                                     <DescriptionOutlined
                                                         sx={{color: "#aa3535"}}
                                                         fontSize={"medium"}

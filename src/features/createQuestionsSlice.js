@@ -1,41 +1,41 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
-        questions: {
-            year: 0,
-            examNo: 0,
-            examType: "",
-            sections: [
-                {
-                    sectionNo: 0,
-                    examRules: "",
-                    passage: "",
-                    audio: "",
-                    image: "",
-                    subSections: [
-                        {
-                            examRules: "",
-                            image: "",
-                            questionText: "",
-                            questionType: "",
-                            isPassage: false,
-                            passages: [""],
-                            questionAndAns: [
-                                {
-                                    questionNumber: 0,
-                                    queAndAns: {
-                                        question: "",
-                                        questionType: "radio",
-                                        options: [""],
-                                        answer: [""]
-                                    }
-                                },
-                            ],
-                        },
-                    ],
-                },
-            ],
-        },
+    questions: {
+        year: 0,
+        examNo: 0,
+        examType: "",
+        sections: [
+            {
+                sectionNo: 0,
+                examRules: "",
+                passage: "",
+                audio: "",
+                image: "",
+                subSections: [
+                    {
+                        examRules: "",
+                        image: "",
+                        questionText: "",
+                        questionType: "",
+                        isPassage: false,
+                        passages: [""],
+                        questionAndAns: [
+                            {
+                                questionNumber: 0,
+                                queAndAns: {
+                                    question: "",
+                                    questionType: "radio",
+                                    options: [""],
+                                    answer: [""]
+                                }
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+    },
 };
 
 const createQuestionSlice = createSlice({
@@ -101,17 +101,17 @@ const createQuestionSlice = createSlice({
                 )
             );
         },
+        addNewOption: ({questions}, {payload}) => {
+            questions.sections.map(section =>
+                section.subSections[payload.subSectionIndex].questionAndAns.map(mainSet =>
+                    mainSet.queAndAns.options[payload.optionIndex] = payload.value)
+            );
+        },
         addNewAnswerField: ({questions}, {payload}) => {
             questions.sections.map(section =>
                 section.subSections[payload.subSectionIndex].questionAndAns.map(mainSet =>
                     mainSet.queAndAns.answer.push(payload.value)
                 )
-            );
-        },
-        addNewOption: ({questions}, {payload}) => {
-            questions.sections.map(section =>
-                section.subSections[payload.subSectionIndex].questionAndAns.map(mainSet =>
-                    mainSet.queAndAns.options[payload.optionIndex] = payload.value)
             );
         },
         addNewAnswer: ({questions}, {payload}) => {
@@ -140,9 +140,7 @@ const createQuestionSlice = createSlice({
         },
         isPassage: ({questions}, {payload}) => {
             questions.sections.map((section) =>
-                section.subSections.map(
-                    (subSection) => (subSection.isPassage = payload)
-                )
+                section.subSections[payload.index].isPassage = payload.value
             );
         },
         subsectionPassage: ({questions}, {payload}) => {
@@ -153,23 +151,19 @@ const createQuestionSlice = createSlice({
             );
         },
         removePassage: ({questions}, {payload}) => {
-            questions.sections.map(section =>
-                section.subSections.map(subSection => {
-                    if (subSection.passages.length > 0) {
-                        subSection.passages.splice(payload, 1);
-                        if (subSection.passages.length === 0) {
-                            subSection.isPassage = false;
-                            subSection.passages.push("");
-                        }
+            questions.sections.map(section => {
+                if (section.subSections[payload.subIndex].passages.length > 0) {
+                    section.subSections[payload.subIndex].passages.splice(payload.passIndex, 1);
+                    if (section.subSections[payload.subIndex].passages.length === 0) {
+                        section.subSections[payload.subIndex].isPassage = false;
+                        section.subSections[payload.subIndex].passages.push("");
                     }
-                })
-            );
+                }
+            })
         },
         addNewPassageField: ({questions}, {payload}) => {
             questions.sections.map(section =>
-                section.subSections.map(subSection =>
-                    subSection.passages.push(payload)
-                )
+                section.subSections[payload.index].passages.push(payload.value)
             );
         },
     },
