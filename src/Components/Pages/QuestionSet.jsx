@@ -60,6 +60,8 @@ const QuestionSet = () => {
         });
     };
 
+    console.log(questionSet)
+
     return (
         <Div>
             <CreateQues/>

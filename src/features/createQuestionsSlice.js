@@ -1,4 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit"
 
 const initialState = {
     questions: {
@@ -38,7 +38,8 @@ const initialState = {
     },
 };
 
-const createQuestionSlice = createSlice({
+
+export const createQuestionSlice = createSlice({
     name: "Create Questions",
     initialState,
     reducers: {
@@ -133,7 +134,7 @@ const createQuestionSlice = createSlice({
             questions.sections.map(section =>
                 section.subSections[payload.subSectionIndex].questionAndAns.map(mainSet => {
                     if (mainSet.queAndAns.answer.length > 0) {
-                        mainSet.queAndAns.answer.splice(payload.optionIndex, 1)
+                        mainSet.queAndAns.answer.splice(payload.answerIndex, 1)
                     }
                 })
             );
@@ -145,9 +146,7 @@ const createQuestionSlice = createSlice({
         },
         subsectionPassage: ({questions}, {payload}) => {
             questions.sections.map((section) =>
-                section.subSections.map((subSection) =>
-                    subSection.passages[payload.index] = payload.value
-                )
+                section.subSections[payload.subIndex].passages[payload.passIndex] = payload.value
             );
         },
         removePassage: ({questions}, {payload}) => {

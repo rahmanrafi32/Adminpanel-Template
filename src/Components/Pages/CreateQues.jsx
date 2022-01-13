@@ -230,17 +230,17 @@ const CreateQues = () => {
                                                     <TextField
                                                         label="Write your passage here"
                                                         placeholder="Passage"
-                                                        value={subSection.passages[indexPassage]}
                                                         multiline
                                                         fullWidth
                                                         value={pass}
                                                         onChange={(event) =>
                                                             dispatch(subsectionPassage({
                                                                 value: event.target.value,
-                                                                index: indexPassage
+                                                                passIndex: indexPassage,
+                                                                subIndex: subSectionIndex
                                                             }))
                                                         }
-                                                        sx={{margin: 1}}
+                                                        sx={{mt: 2}}
                                                     />
                                                     <Tooltip title={"Add Passage"}>
                                                         <IconButton
@@ -259,7 +259,6 @@ const CreateQues = () => {
                                                             disableRipple
                                                             sx={{p: 2}}
                                                             onClick={() => {
-                                                                console.log("sub:", subSectionIndex, "pass:", indexPassage);
                                                                 dispatch(removePassage({
                                                                     subIndex: subSectionIndex,
                                                                     passIndex: indexPassage
@@ -333,7 +332,7 @@ const CreateQues = () => {
                                             <div key={optionIndex}>
                                                 <input
                                                     type={"text"}
-                                                    value={singleQuestion.queAndAns.options[optionIndex]}
+                                                    value={option}
                                                     placeholder={`option ${optionIndex + 1}`}
                                                     style={{marginLeft: '10px'}}
                                                     onChange={(event) => dispatch(addNewOption({
@@ -371,7 +370,7 @@ const CreateQues = () => {
                                             <div key={answerIndex}>
                                                 <input
                                                     type={"text"}
-                                                    value={singleQuestion.queAndAns.answer[answerIndex]}
+                                                    value={ans}
                                                     placeholder={`Answer ${answerIndex + 1}`}
                                                     style={{marginLeft: '10px'}}
                                                     onChange={(event) => dispatch(addNewAnswer({
